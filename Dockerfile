@@ -1,7 +1,7 @@
 # Multi-stage Dockerfile for Trapper Keeper MCP
 
 # Build stage
-FROM python:3.11-slim AS builder
+FROM python:3.13-slim AS builder
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -21,7 +21,7 @@ RUN pip install --no-cache-dir --upgrade pip hatchling hatch-vcs build && \
     SETUPTOOLS_SCM_PRETEND_VERSION_FOR_TRAPPER_KEEPER_MCP=0.1.0 python -m build --wheel
 
 # Runtime stage
-FROM python:3.11-slim
+FROM python:3.13-slim
 
 # Build arguments
 ARG BUILD_DATE
