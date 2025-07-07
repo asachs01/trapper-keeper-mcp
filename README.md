@@ -53,7 +53,7 @@ Trapper Keeper MCP is designed with a modular, event-driven architecture that su
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/trapper-keeper-mcp.git
+git clone https://github.com/asachs01/trapper-keeper-mcp.git
 cd trapper-keeper-mcp
 ```
 
