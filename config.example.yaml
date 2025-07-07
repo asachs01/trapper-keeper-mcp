@@ -1,0 +1,60 @@
+# Example configuration for Trapper Keeper MCP
+
+# Processing configuration
+processing:
+  extract_categories:
+    - "🏗️ Architecture"
+    - "🗄️ Database"
+    - "🔐 Security"
+    - "✅ Features"
+    - "📊 Monitoring"
+    - "🚨 Critical"
+    - "📋 Setup"
+    - "🌐 API"
+  min_importance: 0.3
+  include_metadata: true
+  preserve_structure: true
+  extract_code_blocks: true
+  extract_links: true
+  extract_images: true
+  custom_patterns: {}
+
+# File watching configuration
+watching:
+  paths:
+    - "./docs"
+    - "./README.md"
+  patterns:
+    - "*.md"
+    - "*.txt"
+  ignore_patterns:
+    - ".*"
+    - "__pycache__"
+    - "*.pyc"
+    - "node_modules"
+    - ".git"
+  recursive: true
+  follow_symlinks: false
+  debounce_seconds: 1.0
+
+# Content organization configuration
+organization:
+  output_dir: "./output"
+  group_by_category: true
+  group_by_document: false
+  create_index: true
+  include_metadata: true
+  format: "markdown"  # Options: markdown, json, yaml
+  template: null
+
+# System configuration
+enable_metrics: true
+metrics_port: 9090
+log_level: "INFO"
+max_concurrent_processing: 10
+plugin_dirs: []
+
+# MCP server configuration
+mcp_enabled: true
+mcp_host: "localhost"
+mcp_port: 8765

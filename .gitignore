@@ -1,9 +1,59 @@
-# Dependencies
-node_modules/
-
-# Build output
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
 dist/
-*.tsbuildinfo
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+.coverage.*
+.cache
+*.cover
+*.py,cover
+.hypothesis/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Poetry
+poetry.lock
+
+# pipenv
+Pipfile.lock
+
+# Node.js (for MCP)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Environment files
 .env
@@ -16,18 +66,25 @@ dist/
 *.swp
 *.swo
 *~
+*.sublime-*
 
 # OS files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
 # Logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+logs/
 
 # Test coverage
+htmlcov/
+.tox/
+.nox/
 coverage/
 .nyc_output/
 
@@ -39,3 +96,69 @@ coverage/
 # Trapper Keeper specific
 .trapper-keeper/
 trapper-keeper-cache/
+output/
+config.yaml
+config.json
+
+# Task Master files
+.taskmaster/
+
+# Documentation build
+docs/_build/
+docs/site/
+site/
+
+# Release artifacts
+release/
+
+# IDE specific
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Security
+*.pem
+*.key
+*.cert
+*.crt
+
+# Profiling
+*.prof
+*.lprof
+
+# MacOS
+Icon
+
+# Benchmarks
+benchmarks/results/
+
+# Temporary build files
+pip-wheel-metadata/
+*.egg-info/
+.installed.cfg
+MANIFEST
+
+# Type stubs
+typings/
+.pytype/
+
+# Coverage reports
+coverage/
+.coverage.*
+coverage.xml
+*.lcov
+
+# Test artifacts
+.nox/
+.stestr/
+.testrepository/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Local development
+local/
+scratch/ 

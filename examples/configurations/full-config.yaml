@@ -1,0 +1,494 @@
+# Trapper Keeper MCP - Full Configuration Example
+# This file shows all available configuration options
+
+version: "1.0"
+
+# Extraction settings control how content is extracted from documents
+extraction:
+  # Categories to extract (can be customized)
+  categories:
+    - "🏗️ Architecture"
+    - "🗄️ Database"
+    - "🔐 Security"
+    - "✅ Features"
+    - "📊 Monitoring"
+    - "🚨 Critical"
+    - "📋 Setup"
+    - "🌐 API"
+    - "🧪 Testing"
+    - "⚡ Performance"
+    - "📚 Documentation"
+    - "🚀 Deployment"
+    - "⚙️ Configuration"
+    - "📦 Dependencies"
+    # Custom categories
+    - "🎯 Business Logic"
+    - "🔬 Research"
+    - "💰 Revenue"
+    - "🎨 UI/UX"
+  
+  # Minimum importance score for extraction (0.0-1.0)
+  min_importance: 0.5
+  
+  # Maximum content length per extracted section
+  max_content_length: 10000
+  
+  # Extract code blocks as separate entities
+  extract_code_blocks: true
+  
+  # Extract links and group them
+  extract_links: true
+  
+  # Preserve original formatting
+  preserve_formatting: true
+  
+  # Include line numbers in extracted content
+  include_line_numbers: false
+  
+  # Extract TODO/FIXME comments
+  extract_todos: true
+
+# Output settings control how extracted content is saved
+output:
+  # Default output directory
+  default_dir: "./tk-output"
+  
+  # Output formats (can specify multiple)
+  formats:
+    - "markdown"
+    - "json"
+    - "yaml"
+  
+  # Create an index file listing all extracted content
+  create_index: true
+  
+  # Index filename
+  index_filename: "index.md"
+  
+  # Grouping strategy: category, document, date, none
+  group_by: "category"
+  
+  # Include metadata in output files
+  include_metadata: true
+  
+  # Create subdirectories for each category
+  create_subdirs: true
+  
+  # Timestamp format for metadata
+  timestamp_format: "%Y-%m-%d %H:%M:%S"
+  
+  # Template for output filenames
+  filename_template: "{category_slug}/{document_name}_{section_id}.{extension}"
+  
+  # Maximum filename length
+  max_filename_length: 255
+  
+  # Create table of contents in each file
+  create_toc: true
+
+# Monitoring settings for file watching
+monitoring:
+  # Enable file monitoring
+  enabled: true
+  
+  # Debounce time in seconds (wait before processing)
+  debounce_seconds: 2.0
+  
+  # File patterns to watch
+  patterns:
+    - "*.md"
+    - "*.txt"
+    - "*.markdown"
+    - "README*"
+    - "CLAUDE*"
+    - "CONTEXT*"
+  
+  # Patterns to ignore
+  ignore_patterns:
+    - "*.tmp"
+    - "*.swp"
+    - "*~"
+    - ".*"
+    - "__pycache__"
+    - "*.pyc"
+    - "node_modules"
+    - ".git"
+    - "*.log"
+    - "build/"
+    - "dist/"
+  
+  # Watch subdirectories recursively
+  recursive: true
+  
+  # Maximum directory depth to watch
+  max_depth: 10
+  
+  # Process existing files when starting watch
+  process_existing: true
+  
+  # Use polling instead of native file system events
+  use_polling: false
+  
+  # Polling interval in seconds (if polling enabled)
+  polling_interval: 1.0
+
+# Parser settings for document parsing
+parser:
+  # Maximum file size in bytes (10MB default)
+  max_file_size: 10485760
+  
+  # Default encoding
+  encoding: "utf-8"
+  
+  # Encoding detection fallbacks
+  encoding_fallbacks:
+    - "utf-8"
+    - "latin-1"
+    - "cp1252"
+    - "ascii"
+  
+  # Parse YAML/TOML frontmatter
+  parse_frontmatter: true
+  
+  # Supported file extensions
+  supported_extensions:
+    - ".md"
+    - ".markdown"
+    - ".txt"
+    - ".text"
+  
+  # Code fence languages to recognize
+  code_languages:
+    - "python"
+    - "javascript"
+    - "typescript"
+    - "java"
+    - "go"
+    - "rust"
+    - "bash"
+    - "yaml"
+    - "json"
+    - "sql"
+    - "graphql"
+  
+  # Maximum heading level to consider
+  max_heading_level: 6
+  
+  # Minimum content length for sections
+  min_section_length: 50
+
+# Category detection settings
+detection:
+  # Enable keyword-based detection
+  use_keywords: true
+  
+  # Enable pattern-based detection
+  use_patterns: true
+  
+  # Enable ML-based detection (requires model)
+  use_ml: false
+  
+  # ML model path (if ML enabled)
+  ml_model_path: "./models/category_classifier.pkl"
+  
+  # Confidence threshold for detection
+  confidence_threshold: 0.6
+  
+  # Maximum keywords to check per category
+  max_keywords_per_category: 20
+  
+  # Case-sensitive matching
+  case_sensitive: false
+  
+  # Custom category patterns
+  custom_patterns:
+    "🏗️ Architecture":
+      keywords:
+        - "architecture"
+        - "design"
+        - "structure"
+        - "pattern"
+        - "component"
+        - "module"
+        - "layer"
+        - "microservice"
+      patterns:
+        - ".*architect.*"
+        - ".*design pattern.*"
+        - ".*system design.*"
+      importance_boost: 0.2
+      
+    "🔐 Security":
+      keywords:
+        - "security"
+        - "auth"
+        - "authentication"
+        - "authorization"
+        - "encryption"
+        - "password"
+        - "token"
+        - "certificate"
+        - "ssl"
+        - "tls"
+        - "oauth"
+        - "jwt"
+      patterns:
+        - ".*security.*"
+        - ".*authenticat.*"
+        - ".*authoriz.*"
+        - ".*encrypt.*"
+      importance_boost: 0.3
+    
+    "🎯 Business Logic":
+      keywords:
+        - "business"
+        - "logic"
+        - "rule"
+        - "workflow"
+        - "process"
+        - "revenue"
+        - "customer"
+      patterns:
+        - ".*business logic.*"
+        - ".*business rule.*"
+        - ".*workflow.*"
+      importance_boost: 0.25
+
+# MCP server settings
+mcp:
+  # Server host
+  host: "localhost"
+  
+  # Server port
+  port: 3000
+  
+  # Enable request logging
+  log_requests: true
+  
+  # Request timeout in seconds
+  timeout: 30
+  
+  # Maximum concurrent requests
+  max_concurrent: 10
+  
+  # Enable CORS
+  enable_cors: true
+  
+  # CORS allowed origins
+  cors_origins:
+    - "http://localhost:*"
+    - "https://localhost:*"
+  
+  # Enable metrics endpoint
+  enable_metrics: true
+  
+  # Authentication (optional)
+  auth:
+    enabled: false
+    type: "bearer"
+    tokens:
+      - "secret-token-1"
+      - "secret-token-2"
+
+# Metrics collection settings
+metrics:
+  # Enable metrics collection
+  enabled: true
+  
+  # Metrics port
+  port: 9090
+  
+  # Metrics path
+  path: "/metrics"
+  
+  # Collection interval in seconds
+  interval: 60
+  
+  # Metrics to collect
+  collect:
+    - "files_processed"
+    - "extraction_duration"
+    - "categories_detected"
+    - "errors"
+    - "cache_hits"
+    - "memory_usage"
+  
+  # Histogram buckets for duration metrics
+  processing_buckets:
+    - 0.1
+    - 0.5
+    - 1.0
+    - 2.5
+    - 5.0
+    - 10.0
+    - 30.0
+
+# Logging configuration
+logging:
+  # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  level: "INFO"
+  
+  # Log format
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # Date format
+  date_format: "%Y-%m-%d %H:%M:%S"
+  
+  # Log to file
+  file:
+    enabled: true
+    path: "./logs/trapper-keeper.log"
+    max_size: 10485760  # 10MB
+    backup_count: 5
+    encoding: "utf-8"
+  
+  # Log to console
+  console:
+    enabled: true
+    colorize: true
+    format: "%(levelname)s: %(message)s"  # Simplified for console
+  
+  # Log to syslog
+  syslog:
+    enabled: false
+    host: "localhost"
+    port: 514
+    facility: "local0"
+  
+  # Separate loggers
+  loggers:
+    "trapper_keeper.mcp":
+      level: "DEBUG"
+    "trapper_keeper.monitor":
+      level: "INFO"
+    "trapper_keeper.parser":
+      level: "WARNING"
+
+# Performance settings
+performance:
+  # Maximum concurrent file processing
+  max_concurrent: 5
+  
+  # Process timeout in seconds
+  process_timeout: 300
+  
+  # Memory limit in MB (0 = unlimited)
+  memory_limit: 1024
+  
+  # Enable caching
+  enable_cache: true
+  
+  # Cache backend: memory, redis, disk
+  cache_backend: "memory"
+  
+  # Cache size (number of items)
+  cache_size: 100
+  
+  # Cache TTL in seconds
+  cache_ttl: 3600
+  
+  # Redis settings (if cache_backend is redis)
+  redis:
+    host: "localhost"
+    port: 6379
+    db: 0
+    password: ""
+  
+  # Enable profiling
+  enable_profiling: false
+  
+  # Profile output directory
+  profile_dir: "./profiles"
+
+# Security settings
+security:
+  # Allowed file paths (glob patterns)
+  allowed_paths:
+    - "./**/*"
+    - "~/Documents/**/*"
+  
+  # Denied file paths (glob patterns)
+  denied_paths:
+    - "/etc/*"
+    - "/sys/*"
+    - "/proc/*"
+    - "**/.env"
+    - "**/.git/**"
+    - "**/secrets/**"
+    - "**/private/**"
+  
+  # Maximum file size for processing
+  max_file_size: 10485760  # 10MB
+  
+  # Enable symlink following
+  follow_symlinks: false
+  
+  # Sanitize filenames
+  sanitize_filenames: true
+  
+  # Validate file content
+  validate_content: true
+  
+  # Blocked content patterns
+  blocked_patterns:
+    - "-----BEGIN PRIVATE KEY-----"
+    - "password\\s*=\\s*[\"'][^\"']+[\"']"
+    - "api_key\\s*=\\s*[\"'][^\"']+[\"']"
+
+# Plugin settings
+plugins:
+  # Enable plugin system
+  enabled: false
+  
+  # Plugin directory
+  directory: "./plugins"
+  
+  # Auto-load plugins on startup
+  auto_load: true
+  
+  # Plugin discovery pattern
+  discovery_pattern: "*_plugin.py"
+  
+  # Plugin allowlist (empty = all allowed)
+  allowlist: []
+  
+  # Plugin denylist
+  denylist: []
+  
+  # Plugin configuration
+  configs:
+    example_plugin:
+      setting1: "value1"
+      setting2: 42
+
+# Advanced settings
+advanced:
+  # Enable experimental features
+  experimental: false
+  
+  # Custom section separators
+  section_separators:
+    - "---"
+    - "***"
+    - "* * *"
+  
+  # Link detection patterns
+  link_patterns:
+    - "\\[([^\\]]+)\\]\\(([^\\)]+)\\)"  # Markdown links
+    - "https?://[^\\s]+"                 # URLs
+  
+  # TODO detection patterns
+  todo_patterns:
+    - "TODO:?"
+    - "FIXME:?"
+    - "HACK:?"
+    - "NOTE:?"
+    - "XXX:?"
+  
+  # Import resolution
+  resolve_imports: false
+  
+  # Import patterns
+  import_patterns:
+    - "!include\\s+(.+)"
+    - "{{\\s*include\\s+[\"'](.+)[\"']\\s*}}"

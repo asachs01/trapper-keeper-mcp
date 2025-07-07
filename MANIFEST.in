@@ -1,0 +1,62 @@
+# Include important files
+include LICENSE
+include README.md
+include CHANGELOG.md
+include pyproject.toml
+include .env.example
+
+# Include all Python source files
+recursive-include src *.py
+recursive-include src *.pyi
+recursive-include src py.typed
+
+# Include data files
+recursive-include src/trapper_keeper/templates *
+recursive-include src/trapper_keeper/static *
+recursive-include src/trapper_keeper/data *
+
+# Include configuration examples
+include config.example.yaml
+include config.example.json
+
+# Include type stubs
+recursive-include src *.pyi
+
+# Exclude unnecessary files
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude *~
+global-exclude *.swp
+global-exclude .DS_Store
+global-exclude .gitignore
+global-exclude .dockerignore
+
+# Exclude test files from distribution
+recursive-exclude tests *
+recursive-exclude * test_*.py
+recursive-exclude * *_test.py
+
+# Exclude development files
+exclude .pre-commit-config.yaml
+exclude .yamllint
+exclude Makefile
+exclude tox.ini
+exclude .coverage
+exclude .mypy_cache
+exclude .pytest_cache
+exclude .ruff_cache
+
+# Exclude CI/CD files
+recursive-exclude .github *
+exclude .travis.yml
+exclude .gitlab-ci.yml
+exclude azure-pipelines.yml
+
+# Exclude documentation source
+recursive-exclude docs *
+exclude mkdocs.yml
+
+# Exclude Docker files
+exclude Dockerfile*
+exclude docker-compose*.yml
+exclude .dockerignore

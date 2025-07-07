@@ -1,0 +1,157 @@
+# MkDocs configuration for Trapper Keeper MCP documentation site
+
+site_name: Trapper Keeper MCP
+site_description: Intelligent document extraction and organization system
+site_author: Trapper Keeper Team
+site_url: https://trapper-keeper-mcp.github.io/
+repo_url: https://github.com/yourusername/trapper-keeper-mcp
+repo_name: trapper-keeper-mcp
+
+# Navigation
+nav:
+  - Home: README.md
+  - Getting Started:
+    - Quick Start: docs/getting-started.md
+    - Installation: docs/installation.md
+    - Configuration: docs/configuration.md
+  - User Guide:
+    - CLI Commands: docs/cli-guide.md
+    - MCP Tools: docs/mcp-tools.md
+    - API Reference: docs/api-reference.md
+    - Troubleshooting: docs/troubleshooting.md
+  - Tutorials:
+    - Basic Usage: docs/tutorials/basic-usage.md
+    - Advanced Workflows: docs/tutorials/advanced-workflows.md
+    - Integrations: docs/tutorials/integration-guide.md
+    - Custom Categories: docs/tutorials/custom-categories.md
+  - Architecture:
+    - Overview: docs/architecture/overview.md
+    - Components: docs/architecture/components.md
+    - Data Flow: docs/architecture/data-flow.md
+  - Development:
+    - Contributing: docs/development/contributing.md
+    - Plugin Development: docs/development/plugin-development.md
+    - Testing Guide: docs/development/testing-guide.md
+  - Examples:
+    - Configurations: examples/configurations/
+    - Python Scripts: examples/scripts/
+    - Docker Setup: examples/docker/
+  - API:
+    - Python API: docs/api-reference.md
+    - MCP Protocol: docs/mcp-tools.md
+  - About:
+    - License: LICENSE
+    - Changelog: CHANGELOG.md
+
+# Theme configuration
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+    - toc.follow
+    - toc.integrate
+  language: en
+  icon:
+    logo: material/folder-open
+    repo: fontawesome/brands/github
+
+# Plugins
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
+  - minify:
+      minify_html: true
+  - git-revision-date-localized:
+      enable_creation_date: true
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_source: true
+            show_submodules: true
+
+# Extensions
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Extra configuration
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/yourusername/trapper-keeper-mcp
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/trapper-keeper
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/trapperkeepermcp
+  analytics:
+    provider: google
+    property: G-XXXXXXXXXX
+  version:
+    provider: mike
+
+# CSS customization
+extra_css:
+  - stylesheets/extra.css
+
+# JavaScript customization
+extra_javascript:
+  - javascripts/extra.js

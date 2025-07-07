@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  trapper-keeper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILD_DATE: ${BUILD_DATE:-$(date -u +'%Y-%m-%dT%H:%M:%SZ')}
+        VERSION: ${VERSION:-dev}
+        REVISION: ${REVISION:-$(git rev-parse HEAD)}
+    image: trapper-keeper-mcp:${VERSION:-latest}
+    container_name: trapper-keeper-mcp
+    restart: unless-stopped
+    ports:
+      - "${MCP_PORT:-3000}:3000"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./.trapper-keeper:/app/.trapper-keeper
+      - ./config.yaml:/app/config.yaml:ro
+    environment:
+      - TRAPPER_KEEPER_LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - TRAPPER_KEEPER_ENV=${ENVIRONMENT:-development}
+      - PYTHONUNBUFFERED=1
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - trapper-keeper-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Optional: Redis for caching (uncomment if needed)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: trapper-keeper-redis
+  #   restart: unless-stopped
+  #   ports:
+  #     - "${REDIS_PORT:-6379}:6379"
+  #   volumes:
+  #     - redis-data:/data
+  #   command: redis-server --appendonly yes
+  #   networks:
+  #     - trapper-keeper-network
+
+  # Optional: PostgreSQL for persistence (uncomment if needed)
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: trapper-keeper-postgres
+  #   restart: unless-stopped
+  #   ports:
+  #     - "${POSTGRES_PORT:-5432}:5432"
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_USER=${POSTGRES_USER:-trapper}
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+  #     - POSTGRES_DB=${POSTGRES_DB:-trapper_keeper}
+  #   networks:
+  #     - trapper-keeper-network
+
+  # Development tools
+  dev-shell:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    image: trapper-keeper-mcp:dev
+    container_name: trapper-keeper-dev
+    volumes:
+      - .:/app
+      - ~/.cache/pip:/root/.cache/pip
+    working_dir: /app
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TRAPPER_KEEPER_ENV=development
+    env_file:
+      - .env
+    networks:
+      - trapper-keeper-network
+    profiles:
+      - dev
+
+networks:
+  trapper-keeper-network:
+    driver: bridge
+
+volumes:
+  redis-data:
+  postgres-data:

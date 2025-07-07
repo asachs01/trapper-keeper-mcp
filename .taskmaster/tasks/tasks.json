@@ -2,137 +2,2420 @@
   "master": {
     "tasks": [
       {
-        "id": 1,
-        "title": "Initialize Project Structure and Core Dependencies",
-        "description": "Set up the basic project structure for Trapper Keeper MCP with proper package configuration and core dependencies",
-        "details": "Create package.json/setup.py with dependencies for MCP server functionality, file system operations, and YAML configuration parsing. Initialize project structure with /src, /tests, /docs directories. Set up TypeScript/Python configuration files and establish the main entry point for the MCP server. Include dependencies for: MCP SDK, file watching (chokidar/watchdog), YAML parsing, emoji handling, and markdown processing libraries.",
-        "testStrategy": "Verify package installation, test basic imports, validate project structure creation, and ensure all core dependencies are properly resolved",
+        "id": 23,
+        "title": "Setup Project Structure and Dependencies",
+        "description": "Initialize the Python project structure with FastMCP framework and required dependencies",
+        "details": "Create project directory structure with src/, tests/, docs/ folders. Initialize pyproject.toml with dependencies: fastmcp, click, pytest, markdown, watchdog. Set up virtual environment and install dependencies. Configure Python 3.8+ compatibility.",
+        "testStrategy": "Verify project structure exists, dependencies install correctly, and Python version compatibility",
         "priority": "high",
         "dependencies": [],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create directory structure and files",
+            "description": "Set up the basic project directory structure including source folders, configuration files, and essential project files like README.md and .gitignore",
+            "dependencies": [],
+            "details": "Create main project directory, src folder, tests folder, docs folder, and initialize basic files such as README.md, .gitignore, and placeholder Python modules",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Configure pyproject.toml with dependencies",
+            "description": "Create and configure the pyproject.toml file with project metadata, build system requirements, and all necessary dependencies",
+            "dependencies": [
+              1
+            ],
+            "details": "Define project name, version, description, authors, dependencies, optional dependencies, build backend configuration, and tool-specific settings in pyproject.toml",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Set up virtual environment",
+            "description": "Create and activate a Python virtual environment for the project to isolate dependencies",
+            "dependencies": [
+              2
+            ],
+            "details": "Create virtual environment using venv or conda, activate the environment, and install the project in development mode with all dependencies from pyproject.toml",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Validate installation and compatibility",
+            "description": "Test the project setup by running basic validation checks and ensuring all dependencies are properly installed and compatible",
+            "dependencies": [
+              3
+            ],
+            "details": "Run import tests, check dependency versions, execute basic functionality tests, and verify that the development environment is working correctly",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
       },
       {
-        "id": 2,
-        "title": "Implement Configuration System",
-        "description": "Create the configuration management system for project settings, thresholds, and organization patterns",
-        "details": "Implement trapper-keeper.yml configuration file parsing with default values: claude_md_max_lines: 500, extract_at_lines: 200, docs_folder: '/docs', use_emojis: true, auto_reference: true. Create configuration validation and schema definition. Implement environment variable overrides and project-specific configuration loading. Include configuration for emoji categorization mapping and critical documentation patterns.",
-        "testStrategy": "Test configuration loading with valid/invalid YAML files, verify default value fallbacks, test environment variable overrides, and validate schema enforcement",
+        "id": 24,
+        "title": "Implement Core File Monitoring System",
+        "description": "Create file system monitoring to track CLAUDE.md file size and changes in real-time",
+        "details": "Use watchdog library to monitor CLAUDE.md file changes. Implement FileMonitor class with methods: monitor_file_size(), get_line_count(), detect_size_threshold(). Set thresholds at 200 lines (suggestion) and 500+ lines (warning). Include event callbacks for size changes.",
+        "testStrategy": "Unit tests for file monitoring, mock file changes, verify threshold detection and callback execution",
         "priority": "high",
         "dependencies": [
-          1
+          23
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design FileMonitor class architecture",
+            "description": "Design the overall architecture for the FileMonitor class, including class structure, interfaces, configuration parameters, and integration points for file monitoring functionality.",
+            "dependencies": [],
+            "details": "Define class hierarchy, method signatures, configuration options, error handling strategy, and establish the foundation for file monitoring operations with proper abstraction layers.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement file watching with watchdog",
+            "description": "Integrate the watchdog library to implement real-time file system monitoring capabilities, including file creation, modification, and deletion detection.",
+            "dependencies": [
+              1
+            ],
+            "details": "Set up watchdog observers, configure file system event handlers, implement path monitoring logic, and ensure reliable detection of file system changes with proper error handling.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Add size and line counting methods",
+            "description": "Implement methods to accurately measure file sizes and count lines in monitored files, with support for different file types and encoding formats.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create efficient algorithms for file size calculation, line counting with proper encoding handling, memory-efficient processing for large files, and caching mechanisms for performance optimization.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Create threshold detection logic",
+            "description": "Develop the core logic for detecting when files exceed predefined thresholds for size, line count, or other metrics, with configurable threshold parameters.",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Implement threshold comparison algorithms, support for multiple threshold types, configurable warning and critical levels, and efficient monitoring without excessive resource usage.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Implement event callback system",
+            "description": "Create a flexible callback system that allows users to register custom handlers for various file monitoring events and threshold violations.",
+            "dependencies": [
+              4
+            ],
+            "details": "Design callback registration interface, implement event dispatching mechanism, support for multiple callback types, error handling in callbacks, and ensure thread-safe callback execution.",
+            "status": "done",
+            "testStrategy": ""
+          }
+        ]
       },
       {
-        "id": 3,
-        "title": "Build File System Monitoring and Analysis Engine",
-        "description": "Implement core file system monitoring to track CLAUDE.md file size and detect when extraction is needed",
-        "details": "Create file watcher service using chokidar/watchdog to monitor CLAUDE.md changes. Implement line counting functionality and threshold detection (200+ lines for suggestions, 500+ for warnings). Build content analysis engine to detect document types (architecture, database, security, etc.) using keyword matching and pattern recognition. Include file size tracking and change event handling with debouncing.",
-        "testStrategy": "Test file watching with various file operations, verify line counting accuracy, test threshold detection with different file sizes, and validate content type detection with sample documents",
+        "id": 25,
+        "title": "Build Markdown Content Parser",
+        "description": "Develop intelligent markdown parsing engine to identify and extract logical content sections",
+        "details": "Create MarkdownParser class using markdown library. Implement methods: parse_sections(), identify_content_types(), extract_headers(), maintain_context(). Support nested headers, code blocks, lists, and links. Preserve markdown formatting during extraction.",
+        "testStrategy": "Test parsing various markdown structures, verify section identification, validate content extraction integrity",
         "priority": "high",
         "dependencies": [
-          2
+          23
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design MarkdownParser class structure",
+            "description": "Create the foundational architecture for the MarkdownParser class, defining core interfaces, data structures, and parsing strategy patterns to handle various markdown elements efficiently.",
+            "dependencies": [],
+            "details": "Design class hierarchy with abstract base parser, concrete implementations for different markdown elements, define parsing state management, create extensible plugin architecture for custom markdown extensions, and establish error handling patterns.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement basic markdown parsing",
+            "description": "Develop core parsing functionality to handle fundamental markdown syntax including headers, paragraphs, lists, links, emphasis, and code blocks with proper tokenization and AST generation.",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement lexical analysis for markdown tokens, create parser for basic syntax elements, build abstract syntax tree representation, handle inline and block-level elements, and establish baseline parsing performance benchmarks.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Add section identification logic",
+            "description": "Implement intelligent section detection and classification system to identify document structure, content boundaries, and semantic relationships between different markdown sections.",
+            "dependencies": [
+              2
+            ],
+            "details": "Create section boundary detection algorithms, implement content type classification, develop section hierarchy mapping, add metadata extraction for sections, and establish section relationship tracking mechanisms.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Handle nested headers and content types",
+            "description": "Extend parsing capabilities to properly handle complex nested structures including multi-level headers, nested lists, blockquotes, and mixed content types while maintaining document hierarchy.",
+            "dependencies": [
+              3
+            ],
+            "details": "Implement recursive parsing for nested structures, create hierarchy validation logic, handle edge cases in nesting combinations, develop content type inference algorithms, and ensure proper parent-child relationship maintenance.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Preserve formatting during extraction",
+            "description": "Implement formatting preservation mechanisms to maintain original markdown styling, whitespace, and structural elements during content extraction and transformation processes.",
+            "dependencies": [
+              4
+            ],
+            "details": "Create formatting metadata capture system, implement whitespace preservation algorithms, develop style attribute mapping, handle special character escaping, and ensure reversible parsing for content reconstruction.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Add context maintenance features",
+            "description": "Implement advanced context tracking and maintenance capabilities to preserve document state, cross-references, and contextual relationships throughout the parsing and extraction pipeline.",
+            "dependencies": [
+              5
+            ],
+            "details": "Develop context state management system, implement cross-reference resolution, create contextual metadata preservation, add document state caching mechanisms, and establish context validation and recovery procedures.",
+            "status": "done",
+            "testStrategy": ""
+          }
+        ]
       },
       {
-        "id": 4,
-        "title": "Implement Document Categorization and Emoji System",
-        "description": "Create the intelligent document categorization system with emoji-based visual organization",
-        "details": "Implement the 8-category emoji system: 🏗️ Architecture, 🗄️ Database, 🔐 Security, ✅ Features, 📊 Monitoring, 🚨 Critical, 📋 Setup, 🌐 API. Create content analysis algorithms using keyword matching, section header detection, and pattern recognition to automatically categorize content. Build emoji mapping system and category confidence scoring. Include fallback categorization for unrecognized content types.",
-        "testStrategy": "Test categorization accuracy with sample documents of each type, verify emoji assignment consistency, test edge cases with mixed content, and validate confidence scoring thresholds",
-        "priority": "medium",
-        "dependencies": [
-          3
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 5,
-        "title": "Build Content Extraction and Document Creation Engine",
-        "description": "Implement the core content extraction functionality that intelligently splits CLAUDE.md into organized documents",
-        "details": "Create content extraction algorithms that identify logical sections for extraction based on headers, content type, and size thresholds. Implement document creation with consistent naming conventions (ARCHITECTURE.md, DATABASE_SCHEMA.md, etc.). Build content preservation logic to maintain formatting, links, and context. Include extraction preview and confirmation mechanisms. Implement atomic file operations to prevent data loss during extraction.",
-        "testStrategy": "Test extraction with various CLAUDE.md structures, verify content preservation and formatting, test naming convention consistency, and validate atomic operations with simulated failures",
+        "id": 26,
+        "title": "Create Document Organization System",
+        "description": "Implement automated /docs/ directory structure creation with emoji-based categorization",
+        "details": "Build DocumentOrganizer class with methods: create_docs_structure(), categorize_content(), generate_filename(), apply_emoji_categories(). Implement emoji system: 🏗️ Architecture, 🗄️ Database, 🔐 Security, ✅ Features, 📊 Monitoring, 🚨 Critical, 📋 Setup, 🌐 API. Support nested directories.",
+        "testStrategy": "Verify directory creation, test categorization logic, validate emoji application and filename generation",
         "priority": "high",
         "dependencies": [
-          4
+          25
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design DocumentOrganizer class and emoji categorization system",
+            "description": "Create the main DocumentOrganizer class architecture and define a comprehensive emoji categorization system for different document types and content categories",
+            "dependencies": [],
+            "details": "Design class structure with methods for organization, define emoji mapping for document types (📄 documents, 📊 spreadsheets, 🖼️ images, etc.), create categorization rules and hierarchy",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement directory structure creation",
+            "description": "Develop functionality to create organized directory structures based on the emoji categorization system",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement methods to create folders with emoji prefixes, handle nested directory creation, ensure proper file system permissions and error handling",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Add content categorization logic",
+            "description": "Implement intelligent content analysis to automatically categorize documents based on their content, metadata, and file properties",
+            "dependencies": [
+              1
+            ],
+            "details": "Develop content analysis algorithms, implement file type detection, create rules for automatic categorization based on keywords, metadata, and document structure",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Create filename generation with emoji support",
+            "description": "Implement functionality to generate organized filenames with appropriate emoji prefixes and maintain file naming consistency",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Create filename generation algorithms, implement emoji prefix assignment, handle filename conflicts and sanitization, ensure cross-platform compatibility",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
       },
       {
-        "id": 6,
-        "title": "Implement Reference Link Management System",
-        "description": "Create the smart reference management system that maintains links between CLAUDE.md and extracted documents",
-        "details": "Build reference link creation with emoji categorization and 'READ THIS FIRST!' flagging for critical documents. Implement automatic reference section updates in CLAUDE.md when new documents are created. Create link validation and health checking to ensure references remain valid. Include reference formatting with consistent structure and visual hierarchy. Implement bidirectional linking and context preservation.",
-        "testStrategy": "Test reference link creation and updates, verify emoji categorization in links, test link validation with moved/deleted files, and validate reference section formatting consistency",
-        "priority": "medium",
-        "dependencies": [
-          5
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 7,
-        "title": "Develop MCP Server Interface and Tools",
-        "description": "Implement the MCP server interface with all required tools for AI assistant integration",
-        "details": "Create MCP server implementation with tools: organize_documentation, extract_content, create_reference, validate_structure, suggest_improvements, track_critical_docs. Implement proper MCP protocol handling, tool parameter validation, and response formatting. Include error handling and logging for MCP operations. Build tool discovery and capability reporting. Implement context-aware tool responses for AI assistants.",
-        "testStrategy": "Test MCP server startup and tool registration, verify tool parameter validation, test each tool's functionality independently, and validate MCP protocol compliance with sample AI assistant interactions",
+        "id": 27,
+        "title": "Develop Content Extraction Engine",
+        "description": "Build the core extraction engine that intelligently extracts content while maintaining context and references",
+        "details": "Create ContentExtractor class with methods: extract_section(), maintain_references(), update_claude_md(), create_reference_links(). Implement document reference pattern to replace extracted content with links. Preserve context and maintain markdown structure.",
+        "testStrategy": "Test content extraction accuracy, verify reference link creation, validate CLAUDE.md updates and context preservation",
         "priority": "high",
         "dependencies": [
-          6
+          25,
+          26
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design ContentExtractor architecture",
+            "description": "Design the overall architecture for the ContentExtractor system including class structure, interfaces, and data flow patterns for content manipulation and extraction",
+            "dependencies": [],
+            "details": "Create architectural blueprints defining the ContentExtractor core components, establish interfaces for section extraction, reference management, and context preservation. Define data structures for content representation and processing pipelines.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement section extraction logic",
+            "description": "Build the core logic for extracting specific sections from content while maintaining structural integrity and formatting",
+            "dependencies": [
+              1
+            ],
+            "details": "Develop algorithms to identify and extract content sections based on various criteria (headers, markers, patterns). Implement parsing logic that preserves markdown formatting, code blocks, and nested structures during extraction.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Add reference link creation system",
+            "description": "Implement a system to automatically generate and manage reference links between extracted content and original sources",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Create functionality to generate unique reference identifiers, maintain bidirectional links between extracted sections and source documents, and handle link updates when content is modified or moved.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Build CLAUDE.md update mechanism",
+            "description": "Develop the mechanism to automatically update CLAUDE.md files with extracted content while maintaining proper formatting and structure",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Implement file update logic that can insert, modify, or remove sections in CLAUDE.md files. Ensure proper markdown formatting, section ordering, and integration with existing content without breaking document structure.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Implement context preservation",
+            "description": "Build system to preserve and maintain contextual information during content extraction and manipulation processes",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Develop mechanisms to capture and preserve metadata, surrounding context, hierarchical relationships, and semantic connections when extracting content. Implement context restoration capabilities for rollback scenarios.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Add extraction validation and rollback",
+            "description": "Implement validation mechanisms to verify extraction integrity and rollback capabilities for failed or incorrect operations",
+            "dependencies": [
+              2,
+              3,
+              4,
+              5
+            ],
+            "details": "Create validation rules to check extraction completeness, reference link integrity, and content consistency. Implement rollback mechanisms that can restore previous states when validation fails or errors occur during extraction processes.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
       },
       {
-        "id": 8,
-        "title": "Build CLI Interface and Commands",
-        "description": "Create the command-line interface with all user-facing commands for project management",
-        "details": "Implement CLI commands: init, organize, watch, extract. Build command argument parsing and validation using commander.js/argparse. Create interactive prompts for user confirmations and choices. Implement progress indicators and status reporting. Include help system and command documentation. Build error handling and user-friendly error messages with actionable suggestions.",
-        "testStrategy": "Test all CLI commands with various arguments, verify interactive prompts and user input handling, test error scenarios and message clarity, and validate help system completeness",
+        "id": 28,
+        "title": "Implement FastMCP Server Foundation",
+        "description": "Set up the FastMCP server framework with basic MCP protocol implementation",
+        "details": "Create MCPServer class using FastMCP framework. Implement server initialization, connection handling, and basic MCP protocol methods. Set up async/await patterns for non-blocking operations. Configure server to listen on appropriate port with proper error handling.",
+        "testStrategy": "Test MCP server startup, verify connection handling, validate protocol compliance and async operation",
+        "priority": "high",
+        "dependencies": [
+          23
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set up FastMCP server class structure",
+            "description": "Create the foundational server class architecture with proper inheritance, method definitions, and core attributes needed for MCP server functionality",
+            "dependencies": [],
+            "details": "Design and implement the main FastMCP server class with proper OOP structure, including initialization methods, core attributes for server state management, and placeholder methods for protocol handling",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement MCP protocol compliance",
+            "description": "Develop the core MCP protocol implementation including message parsing, response formatting, and protocol-specific communication patterns",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement MCP protocol specifications including message structure validation, request/response handling, protocol versioning, and compliance with MCP communication standards",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Add connection handling and async patterns",
+            "description": "Implement asynchronous connection management, client handling, and concurrent request processing using async/await patterns",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Create async connection handlers, implement connection pooling, manage client sessions, and establish proper async patterns for handling multiple concurrent connections and requests",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Configure server initialization and port management",
+            "description": "Set up server startup procedures, port binding, configuration management, and service lifecycle handling",
+            "dependencies": [
+              1,
+              3
+            ],
+            "details": "Implement server initialization routines, port configuration and binding, startup/shutdown procedures, configuration file handling, and service management functionality",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Implement error handling and logging",
+            "description": "Add comprehensive error handling, logging system, and monitoring capabilities for server operations and debugging",
+            "dependencies": [
+              2,
+              3,
+              4
+            ],
+            "details": "Create robust error handling mechanisms, implement structured logging with different log levels, add error recovery procedures, and establish monitoring and debugging capabilities for server operations",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 29,
+        "title": "Create organize_documentation MCP Tool",
+        "description": "Implement the primary MCP tool for organizing documentation with intelligent extraction suggestions",
+        "details": "Build organize_documentation tool with parameters: file_path, threshold, auto_extract. Integrate with ContentExtractor and DocumentOrganizer. Provide extraction suggestions based on file size and content analysis. Return structured response with suggested extractions and file organization.",
+        "testStrategy": "Test tool registration, parameter validation, extraction suggestions accuracy, and response format compliance",
+        "priority": "high",
+        "dependencies": [
+          27,
+          28
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design tool interface and parameters",
+            "description": "Design the user interface and define input parameters for the complexity analysis tool, including parameter validation and user interaction patterns",
+            "dependencies": [],
+            "details": "Create interface specifications, define required and optional parameters, establish input validation rules, and design user experience flow for the complexity analysis tool",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Integrate with ContentExtractor and DocumentOrganizer",
+            "description": "Establish integration points with existing ContentExtractor and DocumentOrganizer components to leverage their functionality within the complexity analysis tool",
+            "dependencies": [
+              1
+            ],
+            "details": "Create API connections, implement data flow between components, ensure proper error handling, and establish communication protocols with ContentExtractor and DocumentOrganizer services",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Implement extraction suggestion logic",
+            "description": "Develop intelligent algorithms to analyze content complexity and generate appropriate extraction suggestions based on document structure and content patterns",
+            "dependencies": [
+              2
+            ],
+            "details": "Build complexity scoring algorithms, implement pattern recognition for different document types, create suggestion ranking system, and develop adaptive learning mechanisms for improved recommendations",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Add response formatting and validation",
+            "description": "Implement proper response formatting, output validation, and error handling to ensure consistent and reliable tool outputs",
+            "dependencies": [
+              3
+            ],
+            "details": "Create response templates, implement output validation rules, establish error handling protocols, and ensure consistent formatting across different analysis scenarios",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Create tool registration and testing",
+            "description": "Register the complexity analysis tool in the system and implement comprehensive testing procedures to validate functionality and performance",
+            "dependencies": [
+              4
+            ],
+            "details": "Complete tool registration process, create unit and integration tests, perform performance testing, validate end-to-end functionality, and establish monitoring and logging capabilities",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 30,
+        "title": "Implement extract_content MCP Tool",
+        "description": "Create MCP tool for manual content extraction with user-specified sections",
+        "details": "Build extract_content tool with parameters: source_file, section_identifier, target_category, custom_filename. Allow users to manually specify content for extraction. Integrate with existing extraction engine and provide confirmation of successful extraction.",
+        "testStrategy": "Test manual extraction functionality, parameter validation, section identification accuracy, and extraction confirmation",
         "priority": "medium",
         "dependencies": [
-          7
+          27,
+          28
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design tool parameters and validation",
+            "description": "Define and implement parameter structure for the tool, including input validation, parameter types, and constraint checking to ensure robust operation",
+            "dependencies": [],
+            "details": "Create parameter schema, implement validation logic, define acceptable ranges and formats, and establish error messages for invalid inputs",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement manual section identification",
+            "description": "Develop functionality to manually identify and mark sections within documents, allowing users to specify boundaries and section types",
+            "dependencies": [
+              1
+            ],
+            "details": "Build section detection algorithms, create user interface for manual selection, implement section boundary marking, and establish section classification system",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Integrate with extraction engine",
+            "description": "Connect the manual section identification system with the existing extraction engine to process identified sections and extract relevant data",
+            "dependencies": [
+              2
+            ],
+            "details": "Establish API connections, implement data flow between components, ensure compatibility with extraction engine formats, and optimize processing pipeline",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Add confirmation and error handling",
+            "description": "Implement comprehensive confirmation mechanisms and error handling to ensure reliable operation and user feedback throughout the process",
+            "dependencies": [
+              3
+            ],
+            "details": "Create confirmation dialogs, implement error recovery mechanisms, establish logging and monitoring, and provide clear user feedback for all operations",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
       },
       {
-        "id": 9,
-        "title": "Implement Project Health Monitoring and Analytics",
-        "description": "Create the project health monitoring system with documentation coverage analysis and insights",
-        "details": "Build documentation coverage analysis to track completeness and freshness. Implement file size monitoring with alerts and trend analysis. Create reference link validation with broken link detection and reporting. Build team collaboration insights including documentation access patterns. Include health score calculation and improvement recommendations. Implement periodic health checks and reporting.",
-        "testStrategy": "Test coverage analysis with various project structures, verify health score calculations, test broken link detection accuracy, and validate monitoring alerts and thresholds",
-        "priority": "low",
-        "dependencies": [
-          8
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 10,
-        "title": "Create Installation and Distribution System",
-        "description": "Implement the package distribution system for npm/pip installation and editor integrations",
-        "details": "Create npm package configuration with proper binary linking for global installation. Implement pip package setup with entry points and dependencies. Build installation scripts and post-install configuration. Create editor integration guides and configuration templates for Cursor, VS Code, and Claude Code. Include CI/CD pipeline configuration for automated testing and publishing. Implement version management and update mechanisms.",
-        "testStrategy": "Test npm/pip installation processes, verify global command availability, test editor integration configurations, validate CI/CD pipeline functionality, and test update mechanisms",
+        "id": 31,
+        "title": "Develop create_reference MCP Tool",
+        "description": "Build MCP tool for creating and managing reference links between documents",
+        "details": "Create create_reference tool with parameters: source_file, target_file, reference_text, link_type. Support different reference types (inline, block, footnote). Automatically update both source and target files with appropriate cross-references.",
+        "testStrategy": "Test reference creation, link validation, bidirectional updates, and different reference type handling",
         "priority": "medium",
         "dependencies": [
-          9
+          27,
+          28
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design reference types and parameters",
+            "description": "Define the structure and types of references that can be created between files, including parameter specifications for different reference formats",
+            "dependencies": [],
+            "details": "Create schemas for reference types (direct links, citations, imports, etc.), define parameter structures for each type, and establish naming conventions and metadata requirements",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement link creation logic",
+            "description": "Develop the core functionality to create links between files based on the defined reference types and parameters",
+            "dependencies": [
+              1
+            ],
+            "details": "Build the link creation engine that processes reference requests, validates target files, generates appropriate link syntax, and maintains link registry",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Add bidirectional file updates",
+            "description": "Implement functionality to automatically update both source and target files when references are created or modified",
+            "dependencies": [
+              2
+            ],
+            "details": "Create update mechanisms that modify both linking and linked files, handle concurrent updates, and maintain consistency across file modifications",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Handle different reference formats",
+            "description": "Support multiple reference formats and ensure compatibility across different file types and linking standards",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Implement format adapters for various reference styles (markdown links, wiki-style, citations, etc.), handle format conversion, and maintain format-specific validation",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Add validation and error recovery",
+            "description": "Implement comprehensive validation for reference operations and robust error recovery mechanisms",
+            "dependencies": [
+              2,
+              3,
+              4
+            ],
+            "details": "Build validation rules for reference integrity, implement error detection and recovery procedures, add rollback capabilities for failed operations, and create user-friendly error reporting",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 32,
+        "title": "Build validate_structure MCP Tool",
+        "description": "Implement MCP tool for validating and reporting on documentation structure integrity",
+        "details": "Create validate_structure tool with parameters: project_path, check_links, report_format. Validate /docs/ directory structure, check for broken links, verify emoji categorization consistency, and generate structure reports. Support JSON and markdown report formats.",
+        "testStrategy": "Test structure validation logic, link checking accuracy, report generation, and format compliance",
+        "priority": "medium",
+        "dependencies": [
+          26,
+          28
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design validation parameters and logic",
+            "description": "Define the core validation framework including parameter specifications, validation rules architecture, and logical flow for the validation process",
+            "dependencies": [],
+            "details": "Create validation parameter schemas, define validation rule types, establish validation workflow logic, and design error handling mechanisms",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement structure and link checking",
+            "description": "Develop the core validation engine that performs structural integrity checks and validates internal/external links",
+            "dependencies": [
+              1
+            ],
+            "details": "Build structure validation algorithms, implement link verification functionality, create dependency checking mechanisms, and establish validation result tracking",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Add report generation in multiple formats",
+            "description": "Create comprehensive reporting system that generates validation results in various output formats for different stakeholders",
+            "dependencies": [
+              2
+            ],
+            "details": "Implement report templates for HTML, PDF, JSON, and CSV formats, create summary and detailed report views, and add customizable report configurations",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Create comprehensive validation rules",
+            "description": "Develop and implement a complete set of validation rules covering all aspects of the validation requirements",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Define business logic validation rules, implement data integrity checks, create custom validation rule framework, and establish rule priority and execution order",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 33,
+        "title": "Create CLI Interface Foundation",
+        "description": "Build the command-line interface using Click framework for manual operations",
+        "details": "Create CLI using Click framework with main command group and subcommands: organize, extract, validate, monitor. Implement common options: --config, --verbose, --dry-run. Set up proper error handling, help text, and command validation.",
+        "testStrategy": "Test CLI command registration, option parsing, help text display, and error handling",
+        "priority": "medium",
+        "dependencies": [
+          23,
+          27
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set up Click framework and command structure",
+            "description": "Install Click framework, create basic project structure, and establish the foundation for CLI commands with proper imports and initial configuration.",
+            "dependencies": [],
+            "details": "Install Click package, create main CLI module, set up basic command structure with Click decorators, establish entry point configuration, and create initial project layout for CLI application.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement main command group and subcommands",
+            "description": "Create the main command group using Click's group decorator and implement individual subcommands with their specific functionality and parameters.",
+            "dependencies": [
+              1
+            ],
+            "details": "Define main command group with @click.group(), implement individual subcommands using @click.command(), set up command parameters and arguments, establish command hierarchy and organization.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Add common options and validation",
+            "description": "Implement shared options across commands, add input validation, parameter type checking, and common configuration options that can be reused.",
+            "dependencies": [
+              2
+            ],
+            "details": "Create common Click options using @click.option(), implement parameter validation with Click's built-in types and custom validators, add shared configuration options, implement option inheritance for command groups.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Implement error handling and help system",
+            "description": "Add comprehensive error handling, custom exception handling, and enhance the help system with detailed documentation and usage examples.",
+            "dependencies": [
+              3
+            ],
+            "details": "Implement try-catch blocks for command execution, create custom Click exceptions, enhance help text with detailed descriptions and examples, add error formatting and user-friendly error messages, implement logging for debugging.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 34,
+        "title": "Implement Interactive CLI Mode",
+        "description": "Build interactive guided extraction mode for the CLI interface",
+        "details": "Create interactive mode with prompts for: file selection, content preview, extraction confirmation, category selection, filename customization. Use Click's prompt functionality and provide clear user guidance throughout the process.",
+        "testStrategy": "Test interactive prompts, user input validation, preview functionality, and guided workflow completion",
+        "priority": "medium",
+        "dependencies": [
+          33
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design interactive workflow and prompts",
+            "description": "Create user interface mockups and design the step-by-step workflow for the interactive extraction process, including user prompts, navigation flow, and visual feedback elements",
+            "dependencies": [],
+            "details": "Design wireframes for each step of the extraction workflow, define user prompts and messaging, create navigation patterns, and establish visual hierarchy for the interface components",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement file selection and preview",
+            "description": "Develop the file upload/selection functionality with drag-and-drop support and implement preview capabilities to show users what files they've selected before processing",
+            "dependencies": [
+              1
+            ],
+            "details": "Build file input components with validation, implement drag-and-drop interface, create file preview thumbnails or summaries, and add file type validation and error handling",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Add guided extraction process",
+            "description": "Implement the core extraction functionality with step-by-step guidance, progress indicators, and real-time feedback during the extraction process",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Create extraction engine integration, implement progress tracking, add step-by-step guidance prompts, provide real-time status updates, and handle extraction errors gracefully",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Create confirmation and customization features",
+            "description": "Build confirmation screens for extracted data review, implement customization options for output format and settings, and add final validation before completion",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Design data review interface, implement output format selection, add customization controls for extraction parameters, create confirmation dialogs, and build final validation checks",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 35,
+        "title": "Build Configuration Management System",
+        "description": "Implement YAML/JSON configuration system with environment variable support",
+        "details": "Create ConfigManager class supporting YAML/JSON config files. Implement hierarchy: environment variables > project config > global defaults. Support settings: file_thresholds, emoji_categories, extraction_rules, server_settings. Include config validation and error reporting.",
+        "testStrategy": "Test configuration loading, hierarchy precedence, validation logic, and environment variable override",
+        "priority": "medium",
+        "dependencies": [
+          23
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design ConfigManager class and hierarchy",
+            "description": "Design the core ConfigManager class architecture with proper inheritance hierarchy to support different configuration sources and formats",
+            "dependencies": [],
+            "details": "Create abstract base ConfigManager class with concrete implementations for different config types. Define interfaces for configuration loading, accessing, and updating. Establish class hierarchy with proper separation of concerns between base functionality and format-specific implementations.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement YAML/JSON parsing",
+            "description": "Implement parsers for YAML and JSON configuration file formats with proper error handling and type conversion",
+            "dependencies": [
+              1
+            ],
+            "details": "Create YAMLConfigManager and JSONConfigManager classes that extend the base ConfigManager. Implement file reading, parsing, and data structure conversion. Handle nested configurations, arrays, and different data types. Include proper exception handling for malformed files.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Add environment variable support",
+            "description": "Implement environment variable configuration source with prefix support and type coercion",
+            "dependencies": [
+              1
+            ],
+            "details": "Create EnvironmentConfigManager to read configuration from environment variables. Support configurable prefixes, nested key mapping using delimiters, and automatic type conversion. Handle case sensitivity and provide fallback mechanisms for missing variables.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Create validation and error handling",
+            "description": "Implement comprehensive validation system with schema support and detailed error reporting",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Create validation framework with schema definition support. Implement type checking, required field validation, range validation, and custom validators. Provide detailed error messages with field paths and suggestions. Handle validation errors gracefully with proper exception hierarchy.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Add configuration merging logic",
+            "description": "Implement configuration merging system to combine multiple sources with priority handling and conflict resolution",
+            "dependencies": [
+              2,
+              3,
+              4
+            ],
+            "details": "Create merging engine that can combine configurations from multiple sources (files, environment variables, defaults). Implement priority-based merging with configurable precedence rules. Handle deep merging of nested objects, array merging strategies, and conflict resolution policies.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 36,
+        "title": "Implement Batch Processing Capabilities",
+        "description": "Add support for processing multiple files and projects in batch operations",
+        "details": "Extend CLI and core engine to support batch processing. Implement BatchProcessor class with methods: process_directory(), process_file_list(), generate_batch_report(). Support parallel processing for performance and provide progress indicators.",
+        "testStrategy": "Test batch processing accuracy, parallel execution, progress reporting, and error handling for failed items",
+        "priority": "medium",
+        "dependencies": [
+          27,
+          33
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "CLI Integration for Batch Mode",
+            "description": "Design and implement a command-line interface (CLI) that enables users to initiate batch processing, specify input parameters, and configure batch mode options.",
+            "dependencies": [],
+            "details": "This subtask involves defining CLI arguments, parsing user input, and ensuring the interface supports batch-specific configurations such as input directories, output locations, and processing flags.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Directory Traversal and File Discovery",
+            "description": "Implement logic to traverse directories and discover files to be processed in batch mode, supporting recursive search and file type filtering.",
+            "dependencies": [
+              1
+            ],
+            "details": "This subtask requires robust handling of file system traversal, filtering files based on user-specified criteria, and preparing a list of files for processing.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Parallel Processing Implementation",
+            "description": "Develop the core batch processing engine to handle files in parallel, maximizing throughput while managing resource constraints and concurrency.",
+            "dependencies": [
+              2
+            ],
+            "details": "This includes designing thread or process pools, distributing file processing tasks, and ensuring thread safety and scalability.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Progress Reporting and Error Aggregation",
+            "description": "Integrate mechanisms to report processing progress and aggregate errors encountered during batch execution for user review.",
+            "dependencies": [
+              3
+            ],
+            "details": "This subtask covers real-time progress updates, logging, and collecting error details in a structured format for later analysis.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Batch Report Generation",
+            "description": "Generate a comprehensive batch report summarizing processing outcomes, including successes, failures, and key metrics.",
+            "dependencies": [
+              4
+            ],
+            "details": "The report should include statistics, error summaries, and any relevant metadata, formatted for easy consumption by users or downstream systems.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 37,
+        "title": "Create Comprehensive Unit Test Suite",
+        "description": "Develop comprehensive unit tests for all core components and functionality",
+        "details": "Create unit tests using pytest for: FileMonitor, MarkdownParser, DocumentOrganizer, ContentExtractor classes. Mock file system operations, test edge cases, error conditions, and boundary values. Achieve >90% code coverage with meaningful test assertions.",
+        "testStrategy": "Run pytest with coverage reporting, verify all critical paths tested, validate mock usage, and ensure test isolation",
+        "priority": "high",
+        "dependencies": [
+          24,
+          25,
+          26,
+          27
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Develop and Test FileMonitor Component",
+            "description": "Implement the FileMonitor class, ensuring it detects file changes and triggers appropriate events. Create a dedicated test module covering normal operation, edge cases (e.g., rapid file changes, permission errors), and use mocks for file system interactions.",
+            "dependencies": [],
+            "details": "Tests should include scenarios such as file creation, modification, deletion, and error handling. Use mocks to simulate file system events and ensure isolation from the actual file system.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Develop and Test MarkdownParser Component",
+            "description": "Implement the MarkdownParser class to accurately parse markdown files into structured data. Create comprehensive tests for various markdown features, malformed input, and edge cases.",
+            "dependencies": [],
+            "details": "Test cases should cover headings, lists, code blocks, tables, and malformed markdown. Include tests for performance and large files. Use mocks if the parser interacts with external libraries.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Develop and Test DocumentOrganizer Component",
+            "description": "Implement the DocumentOrganizer class to manage and categorize parsed documents. Write tests for organizing logic, handling duplicates, and edge cases such as empty or conflicting categories.",
+            "dependencies": [],
+            "details": "Tests should verify correct categorization, reorganization after updates, and handling of missing or ambiguous metadata. Use mocks for dependencies on other components.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Develop and Test ContentExtractor Component",
+            "description": "Implement the ContentExtractor class to extract relevant content from parsed documents. Create tests for extraction accuracy, handling of missing or malformed content, and edge cases.",
+            "dependencies": [],
+            "details": "Test extraction of titles, summaries, metadata, and embedded resources. Include tests for documents with incomplete or unexpected structures. Use mocks for dependencies.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Test Data Setup for All Components",
+            "description": "Design and implement reusable test data and fixtures for all components, covering normal, edge, and error scenarios. Ensure data supports both unit and integration tests.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "Create sample markdown files, file system structures, and document metadata. Provide fixtures for common test scenarios and edge cases, ensuring consistency across test modules.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Configure and Enforce Coverage Reporting",
+            "description": "Set up automated coverage reporting to ensure >90% test coverage across all components. Integrate coverage tools into the CI pipeline and enforce thresholds.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "details": "Configure tools such as coverage.py or Istanbul. Ensure reports are generated after each test run, and fail builds if coverage drops below the threshold. Include branch and edge case coverage.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 38,
+        "title": "Build MCP Server Integration Tests",
+        "description": "Develop integration tests specifically for MCP server functionality and tool interactions",
+        "details": "Create integration tests for MCP server using pytest-asyncio. Test tool registration, parameter validation, async operations, error handling, and response formats. Mock MCP client interactions and validate protocol compliance.",
+        "testStrategy": "Test MCP protocol compliance, tool integration, async operation handling, and end-to-end server functionality",
+        "priority": "high",
+        "dependencies": [
+          29,
+          30,
+          31,
+          32
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Server Setup and Teardown",
+            "description": "Implement procedures to reliably start and stop the server environment before and after tests, ensuring a clean state for each test run.",
+            "dependencies": [],
+            "details": "This includes configuring the test web host, initializing required resources (e.g., databases, mock services), and ensuring proper teardown to avoid resource leaks or test interference.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Tool Registration Tests",
+            "description": "Develop tests to verify that tools or services can be registered with the server as expected.",
+            "dependencies": [
+              1
+            ],
+            "details": "Focus on validating the registration process, ensuring correct data handling, and confirming that the server acknowledges and stores tool registrations appropriately.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Asynchronous Operation Tests",
+            "description": "Create tests to validate the correct handling of asynchronous operations within the server, including message delivery and event processing.",
+            "dependencies": [
+              1
+            ],
+            "details": "Ensure that async workflows are tested for proper completion, synchronization, and error handling, using mechanisms such as events or callbacks to detect operation completion.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Protocol Compliance Validation",
+            "description": "Design tests to confirm that the server adheres to the required communication protocols and data contracts.",
+            "dependencies": [
+              1
+            ],
+            "details": "Check that requests and responses conform to protocol specifications, including correct formatting, error handling, and edge cases.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Client/Server Mock Integration",
+            "description": "Integrate client and server mocks to simulate realistic interactions and validate end-to-end integration scenarios.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "Use mocks to emulate client behavior and external dependencies, ensuring the server interacts correctly with all components under test conditions.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 39,
+        "title": "Implement Performance Optimization",
+        "description": "Optimize performance for large files and concurrent operations",
+        "details": "Profile and optimize: file parsing for 10,000+ line files, concurrent file monitoring, memory usage during extraction, async operation efficiency. Implement caching for parsed content, lazy loading for large files, and connection pooling for MCP server.",
+        "testStrategy": "Performance benchmarks for large files, memory usage profiling, concurrent operation testing, and response time validation",
+        "priority": "medium",
+        "dependencies": [
+          24,
+          25,
+          27
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Profile and Optimize File Parsing",
+            "description": "Analyze current file parsing logic to identify bottlenecks, implement stream processing or chunked reading, and validate improvements for large and complex files.",
+            "dependencies": [],
+            "details": "Use profiling tools to measure parsing speed and memory usage. Refactor code to use streaming or chunked processing where possible. Test with large and nested files to ensure reliability and efficiency.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Enhance Concurrent Monitoring Mechanisms",
+            "description": "Review and improve the concurrency model for monitoring processes, ensuring thread safety and efficient resource utilization.",
+            "dependencies": [
+              1
+            ],
+            "details": "Evaluate current concurrency patterns (e.g., threads, async tasks). Implement improvements such as thread pools, locks, or async primitives to reduce contention and improve throughput.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Conduct Memory Profiling and Optimize Usage",
+            "description": "Profile memory consumption across the application, identify leaks or excessive usage, and refactor code to optimize memory allocation and release.",
+            "dependencies": [
+              1
+            ],
+            "details": "Use memory profilers to detect hotspots and leaks. Refactor data structures and lifecycle management to minimize memory footprint, especially during parsing and monitoring operations.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Tune Asynchronous Operations",
+            "description": "Analyze and optimize asynchronous workflows to minimize latency and maximize throughput, ensuring non-blocking I/O and efficient task scheduling.",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Profile async operations for bottlenecks. Adjust concurrency levels, task batching, and error handling to improve responsiveness and resource utilization.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Implement and Validate Caching Strategies",
+            "description": "Design and integrate caching mechanisms to reduce redundant computations and I/O, and validate cache effectiveness through performance testing.",
+            "dependencies": [
+              3,
+              4
+            ],
+            "details": "Select appropriate cache types (in-memory, distributed). Implement cache invalidation and consistency policies. Measure cache hit/miss rates and overall impact on performance.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Establish Connection Pooling for External Resources",
+            "description": "Implement connection pooling for databases, APIs, or other external services to reduce connection overhead and improve scalability.",
+            "dependencies": [
+              5
+            ],
+            "details": "Configure and tune connection pools for optimal size and timeout settings. Monitor pool usage and adjust parameters based on load testing results.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 40,
+        "title": "Create End-to-End Workflow Tests",
+        "description": "Develop comprehensive end-to-end tests covering complete user workflows",
+        "details": "Create E2E tests covering: full extraction workflow, MCP server integration, CLI operations, configuration management, and error recovery. Use temporary directories, mock file systems, and validate complete user scenarios from start to finish.",
+        "testStrategy": "Test complete user workflows, validate file system changes, verify MCP tool interactions, and ensure proper cleanup",
+        "priority": "medium",
+        "dependencies": [
+          37,
+          38
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Workflow Scenarios",
+            "description": "Define realistic end-to-end user scenarios that cover interactions across CLI, server, and file system. Ensure scenarios reflect actual user behaviors and edge cases.",
+            "dependencies": [],
+            "details": "Document each workflow with expected inputs, outputs, and error conditions. Prioritize scenarios based on risk and frequency of use.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Set Up Test Environment",
+            "description": "Establish isolated test environments, including temporary directories and mock services, to ensure repeatability and prevent side effects between tests.",
+            "dependencies": [
+              1
+            ],
+            "details": "Automate environment setup and teardown. Use mocks/stubs for external dependencies and ensure file system state is controlled for each test run.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Implement CLI Workflow Tests",
+            "description": "Develop automated tests that execute CLI commands according to the defined scenarios, validating outputs and side effects on the file system.",
+            "dependencies": [
+              2
+            ],
+            "details": "Ensure tests are independent, repeatable, and cover both typical and edge-case CLI interactions. Capture logs and outputs for validation.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Develop Server Integration Tests",
+            "description": "Create integration tests that interact with the server component, verifying correct behavior in response to workflow actions and ensuring proper integration with the CLI and file system.",
+            "dependencies": [
+              3
+            ],
+            "details": "Simulate realistic server requests and responses. Validate data consistency and error handling across system boundaries.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Implement Cleanup and Validation Routines",
+            "description": "Automate cleanup of temporary resources and validate that the environment returns to a known good state after each test. Ensure all assertions and post-conditions are checked.",
+            "dependencies": [
+              4
+            ],
+            "details": "Include checks for resource leaks, orphaned files, and residual state. Report and log any discrepancies for further investigation.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 41,
+        "title": "Package and Distribution Setup",
+        "description": "Set up package distribution with proper metadata, dependencies, and installation process",
+        "details": "Configure pyproject.toml for package distribution with proper metadata, entry points for CLI, dependency specifications, and Python version requirements. Set up build system, wheel generation, and PyPI distribution preparation. Include MIT license and proper README.",
+        "testStrategy": "Test package installation from wheel, verify entry points work, validate dependency resolution, and confirm metadata accuracy",
+        "priority": "medium",
+        "dependencies": [
+          39,
+          40
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define pyproject.toml and Package Metadata",
+            "description": "Create and configure the pyproject.toml file, specifying required and recommended metadata fields such as name, version, authors, dependencies, and classifiers in the [project] table. Ensure compliance with PEP 621 and validate metadata for PyPI compatibility.",
+            "dependencies": [],
+            "details": "Include both static and dynamic metadata as appropriate. Use valid classifiers and ensure all required fields are present for successful builds and publication.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Configure Build System",
+            "description": "Set up the [build-system] table in pyproject.toml to specify the build backend (e.g., setuptools) and build requirements. Ensure the build system is compatible with modern Python packaging standards.",
+            "dependencies": [
+              1
+            ],
+            "details": "Define the build backend and any necessary plugins or dependencies. Confirm that the configuration supports both wheel and sdist creation.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Create Distribution Artifacts (Wheel and sdist)",
+            "description": "Build the distribution artifacts for the package, including both wheel (.whl) and source distribution (sdist) files, using the configured build system.",
+            "dependencies": [
+              2
+            ],
+            "details": "Run the appropriate build commands (e.g., python -m build) and verify that both wheel and sdist files are generated without errors. Validate the artifacts for completeness and correctness.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Automate PyPI Release and Distribution",
+            "description": "Set up automation for uploading distribution artifacts to PyPI and managing releases, using tools such as twine and CI/CD workflows.",
+            "dependencies": [
+              3
+            ],
+            "details": "Configure scripts or CI pipelines to handle authentication, artifact upload, and release tagging. Ensure the process is repeatable and secure.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 42,
+        "title": "Create Documentation and Examples",
+        "description": "Develop comprehensive documentation, API reference, and usage examples",
+        "details": "Create documentation including: installation guide, configuration reference, MCP tool documentation, CLI usage examples, API reference, troubleshooting guide. Include example configurations, sample CLAUDE.md files, and expected output formats. Use markdown format with clear structure.",
+        "testStrategy": "Validate documentation accuracy, test all examples, verify installation instructions, and ensure completeness of coverage",
+        "priority": "medium",
+        "dependencies": [
+          41
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Installation Guide",
+            "description": "Develop a comprehensive installation guide covering prerequisites, setup steps, and verification procedures for the software.",
+            "dependencies": [],
+            "details": "Include platform-specific instructions, troubleshooting for common installation issues, and any required configuration during installation.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Develop Configuration Reference",
+            "description": "Document all configuration options, parameters, and environment variables available for the software.",
+            "dependencies": [
+              1
+            ],
+            "details": "Provide detailed explanations, default values, valid ranges, and examples for each configuration setting.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Document CLI/MCP Tool Usage",
+            "description": "Create documentation for the Command Line Interface (CLI) and/or Management Control Panel (MCP) tools, including commands, flags, and usage patterns.",
+            "dependencies": [
+              1
+            ],
+            "details": "Include command syntax, examples, and descriptions of each available command and option.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Write API Reference",
+            "description": "Produce a detailed API reference covering all endpoints, request/response formats, authentication, and error codes.",
+            "dependencies": [
+              2
+            ],
+            "details": "Include example requests and responses, parameter descriptions, and usage notes for each API endpoint.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Provide Usage Examples and Troubleshooting",
+            "description": "Compile practical usage examples and a troubleshooting section addressing common issues and solutions.",
+            "dependencies": [
+              2,
+              3,
+              4
+            ],
+            "details": "Showcase typical workflows, advanced use cases, and step-by-step solutions for frequently encountered problems.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 43,
+        "title": "Setup Project Structure and Dependencies",
+        "description": "Initialize the Python project with proper structure, dependencies, and configuration files",
+        "details": "Create project structure with src/trapper_keeper/, tests/, docs/ directories. Setup pyproject.toml with dependencies: fastmcp>=0.9.0, click>=8.1.0, watchdog>=3.0.0, pyyaml>=6.0, markdown>=3.5.0, pytest>=7.4.0. Initialize git repository, create .gitignore, README.md, and LICENSE (MIT). Setup pre-commit hooks with black, isort, flake8. Create __init__.py files and basic package structure.",
+        "testStrategy": "Verify project structure exists, dependencies install correctly, and basic imports work without errors",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Project Directory Structure",
+            "description": "Establish a clear and organized directory structure for the project, including folders for source code, data, tests, and documentation, following Python best practices.",
+            "dependencies": [],
+            "details": "Set up directories such as 'src/', 'tests/', 'docs/', and any other relevant folders. Ensure naming conventions are consistent and intuitive.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Set Up Dependency Management with pyproject.toml",
+            "description": "Configure dependency management using a tool like Poetry or PDM by creating and editing the pyproject.toml file to specify project metadata and dependencies.",
+            "dependencies": [
+              1
+            ],
+            "details": "Initialize pyproject.toml, add required dependencies, and configure project metadata. Ensure compatibility with the chosen project tool.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Initialize Version Control and Add Essential Files",
+            "description": "Set up Git for version control, create a .gitignore file to exclude unnecessary files, and add a LICENSE file to specify project licensing.",
+            "dependencies": [
+              2
+            ],
+            "details": "Run 'git init', create and configure .gitignore for Python projects, and add a LICENSE file appropriate for the project's intended use.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Configure Pre-commit Hooks and Tooling",
+            "description": "Set up pre-commit configuration to automate code quality checks and formatting before commits are made.",
+            "dependencies": [
+              3
+            ],
+            "details": "Install pre-commit, create a .pre-commit-config.yaml file with desired hooks (e.g., black, flake8), and run 'pre-commit install' to activate hooks.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 44,
+        "title": "Implement Core File Monitoring System",
+        "description": "Create file system monitoring to track CLAUDE.md file changes and size",
+        "details": "Use watchdog library to monitor CLAUDE.md files. Create FileMonitor class with methods: monitor_file(), get_file_size(), calculate_line_count(), detect_changes(). Implement event handlers for file modifications. Add configurable thresholds (200 lines warning, 500+ critical). Use asyncio for non-blocking monitoring. Store monitoring state and history.",
+        "testStrategy": "Unit tests for file monitoring events, line counting accuracy, and threshold detection. Mock file system changes to verify event handling.",
+        "priority": "high",
+        "dependencies": [
+          43
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement FileMonitor Class Structure",
+            "description": "Design and implement the core FileMonitor class, defining its attributes, initialization logic, and public interface for monitoring files or directories.",
+            "dependencies": [],
+            "details": "Establish the class skeleton, including constructor, configuration options, and method stubs for starting and stopping monitoring.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Integrate Watchdog for Filesystem Events",
+            "description": "Incorporate the watchdog library to enable real-time monitoring of filesystem events within the FileMonitor class.",
+            "dependencies": [
+              1
+            ],
+            "details": "Set up watchdog observers and link them to the FileMonitor class, ensuring support for event types such as create, modify, and delete.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Develop Custom Event Handler",
+            "description": "Create a custom event handler to process and respond to filesystem events detected by watchdog.",
+            "dependencies": [
+              2
+            ],
+            "details": "Implement logic to handle relevant events, filter unwanted events, and trigger callbacks or internal state updates as needed.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Implement Threshold Logic",
+            "description": "Add logic to evaluate and enforce thresholds, such as event frequency or file size limits, within the monitoring workflow.",
+            "dependencies": [
+              3
+            ],
+            "details": "Define threshold parameters, track event counts or file metrics, and trigger alerts or actions when thresholds are exceeded.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Design State and History Management",
+            "description": "Implement mechanisms to maintain monitoring state and historical event data for analysis or recovery.",
+            "dependencies": [
+              4
+            ],
+            "details": "Store relevant state information, such as active events and historical logs, and provide interfaces for querying or resetting state.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 45,
+        "title": "Build Markdown Content Parser",
+        "description": "Develop intelligent markdown parsing to identify and extract logical content sections",
+        "details": "Create MarkdownParser class using python-markdown library. Implement methods: parse_content(), identify_sections(), extract_headers(), detect_content_types(). Use regex patterns to identify different content types (architecture, features, setup, etc.). Create ContentSection dataclass to represent parsed sections with metadata. Support nested headers and maintain document structure.",
+        "testStrategy": "Test parsing various markdown formats, verify section identification accuracy, and validate content extraction maintains formatting",
+        "priority": "high",
+        "dependencies": [
+          43
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Parser Class Structure",
+            "description": "Define the architecture and interfaces for the parser class, including methods for parsing, tokenization, and output structure.",
+            "dependencies": [],
+            "details": "Establish the main parser class, determine how it will interact with lexer/splitter components, and outline extensibility for custom parsing logic.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Basic Markdown Parsing",
+            "description": "Develop the core logic to parse standard Markdown elements such as headings, paragraphs, lists, and code blocks.",
+            "dependencies": [
+              1
+            ],
+            "details": "Utilize a lexer or splitter to break input into tokens or blocks, then process each according to Markdown syntax rules.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Identify and Segment Sections",
+            "description": "Add functionality to detect and segment logical sections within the Markdown document, such as by headers or thematic breaks.",
+            "dependencies": [
+              2
+            ],
+            "details": "Implement logic to recognize section boundaries and organize parsed content into a hierarchical or segmented structure.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Extract Header and Content Types",
+            "description": "Enhance the parser to extract and classify headers, paragraphs, lists, and other content types for semantic understanding.",
+            "dependencies": [
+              3
+            ],
+            "details": "Tag each parsed block with its type (e.g., header, paragraph, list) and extract relevant metadata such as header level.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Support Nested Structures",
+            "description": "Implement parsing logic to handle nested Markdown elements, such as lists within blockquotes or nested lists.",
+            "dependencies": [
+              4
+            ],
+            "details": "Ensure the parser can correctly interpret and represent nested structures, maintaining their hierarchy in the output.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Preserve Metadata and Context",
+            "description": "Add mechanisms to retain and output contextual metadata, such as source line numbers, custom attributes, or parsing context.",
+            "dependencies": [
+              5
+            ],
+            "details": "Store and expose metadata alongside parsed content to support downstream processing or rendering requirements.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 46,
+        "title": "Create Document Categorization Engine",
+        "description": "Implement emoji-based categorization system for extracted content",
+        "details": "Create CategoryEngine class with predefined emoji mappings: 🏗️ Architecture, 🗄️ Database, 🔐 Security, ✅ Features, 📊 Monitoring, 🚨 Critical, 📋 Setup, 🌐 API. Implement keyword-based categorization using content analysis. Create categorize_content() method that analyzes headers, keywords, and context. Support custom categorization rules via configuration. Fallback to generic category for unmatched content.",
+        "testStrategy": "Test categorization accuracy with sample content, verify emoji assignment correctness, and validate custom rule processing",
+        "priority": "medium",
+        "dependencies": [
+          45
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define Emoji Mapping Structure",
+            "description": "Establish a data structure to map emojis to their identifiers and relevant metadata, ensuring compatibility with the emoji dataset and supporting custom categories.",
+            "dependencies": [],
+            "details": "Design a mapping that links emoji short names or hex codes to their full data objects. Ensure the structure supports easy retrieval and extensibility for future emoji additions.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Keyword and Content Analysis",
+            "description": "Develop logic to analyze input text or content, extracting relevant keywords and matching them to corresponding emojis using the defined mapping.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create functions to parse input, identify keywords, and associate them with emojis based on the mapping. Ensure support for variations such as skin tones and multi-word expressions.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Develop Categorization Logic",
+            "description": "Build the logic to group emojis into categories based on analysis results and predefined or custom category definitions.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Implement category assignment using the emoji mapping and analysis output. Support both default and user-defined categories, and allow for custom icons or display order.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Enable Custom Rules and Configuration",
+            "description": "Add support for user-defined rules and configuration options to extend or override default emoji mappings, analysis logic, and category structures.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Provide interfaces or configuration files for users to define custom emoji mappings, keyword associations, and category logic. Ensure changes are dynamically applied without breaking existing functionality.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 47,
+        "title": "Implement Content Extraction Engine",
+        "description": "Build the core extraction engine that moves content from CLAUDE.md to organized docs structure",
+        "details": "Create ExtractionEngine class with methods: extract_section(), generate_filename(), create_reference_link(), update_source_file(). Implement smart filename generation based on content and category. Maintain original formatting and links. Create reference links in CLAUDE.md pointing to extracted files. Support atomic operations to prevent data loss. Handle edge cases like duplicate content and circular references.",
+        "testStrategy": "Test extraction accuracy, filename generation, reference link creation, and atomic operation rollback on failures",
+        "priority": "high",
+        "dependencies": [
+          44,
+          45,
+          46
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Develop Extraction Logic",
+            "description": "Implement logic to parse source files and extract the required content or data segments for further processing.",
+            "dependencies": [],
+            "details": "This involves identifying the patterns or markers for extraction, handling different file formats, and ensuring accurate parsing of the intended content.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Filename Generation",
+            "description": "Create a robust filename generation system that produces unique, descriptive, and compliant filenames for extracted content.",
+            "dependencies": [
+              1
+            ],
+            "details": "Follow best practices such as using consistent structure, limiting length, avoiding special characters, and including relevant metadata like date or version. Ensure compatibility with operating system constraints and project conventions.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Create Reference Link Generation",
+            "description": "Design and implement logic to generate reference links that accurately point to the newly created files or extracted content.",
+            "dependencies": [
+              2
+            ],
+            "details": "Ensure that reference links are persistent, correctly formatted, and easily resolvable within the context of the project or system.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Update Source File with References",
+            "description": "Modify the original source file to include or update references to the newly generated files or extracted content.",
+            "dependencies": [
+              3
+            ],
+            "details": "Ensure that updates are performed in a way that maintains file integrity and traceability, and that references are inserted at the correct locations.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Ensure Atomic Operation and Rollback",
+            "description": "Implement mechanisms to guarantee that the extraction, file creation, and source update are atomic, with rollback capabilities in case of failure.",
+            "dependencies": [
+              4
+            ],
+            "details": "Use transaction-like approaches to ensure that either all changes are committed or none are, preventing partial updates and data corruption.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Handle Edge Cases and Errors",
+            "description": "Identify and address potential edge cases and error scenarios throughout the extraction and update process.",
+            "dependencies": [
+              5
+            ],
+            "details": "Consider issues such as duplicate filenames, missing data, permission errors, unsupported file formats, and invalid references. Implement comprehensive error handling and logging.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 48,
+        "title": "Build Document Organization System",
+        "description": "Create the /docs/ directory structure and file organization system",
+        "details": "Create DocumentOrganizer class to manage /docs/ structure. Implement create_docs_structure(), organize_by_category(), maintain_naming_conventions(). Create subdirectories based on categories (architecture/, features/, setup/, etc.). Implement consistent naming: category-specific-name.md format. Support nested structures for complex documentation. Create index files for each category. Handle file conflicts and versioning.",
+        "testStrategy": "Verify directory creation, file organization accuracy, naming convention compliance, and conflict resolution",
+        "priority": "medium",
+        "dependencies": [
+          46,
+          47
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Docs Directory",
+            "description": "Set up the main 'docs' directory as the root for all documentation files.",
+            "dependencies": [],
+            "details": "Establish a unique main folder named 'docs' to serve as the central location for all documentation. This will be the starting point for further organization and structuring.[3]",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Organize by Category",
+            "description": "Develop a logical folder structure within the docs directory based on categories and subcategories.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create top-level folders for each major category (e.g., 'Guides', 'API', 'Tutorials') and, where necessary, subfolders for further granularity. This hierarchical structure should reflect the main topics or functions of the documentation.[1][2]",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Enforce Naming Conventions",
+            "description": "Define and implement consistent naming conventions for files and folders.",
+            "dependencies": [
+              2
+            ],
+            "details": "Establish rules for naming files and folders, such as including relevant information (e.g., date, project, category) and using a uniform style (e.g., lowercase, hyphens). Ensure all documentation adheres to these conventions for clarity and ease of retrieval.[1][4]",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Support Nested Structure",
+            "description": "Enable and document support for nested folders to accommodate complex or multi-level categories.",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Allow for the creation of subfolders within category folders to represent subcategories or related topics, ensuring the structure remains logical and navigable as documentation grows.[1][2][3]",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Generate Index Files",
+            "description": "Create index files in each folder to list and describe contained documents.",
+            "dependencies": [
+              4
+            ],
+            "details": "For each folder (including nested ones), generate an index file (e.g., README.md or index.md) that lists all files and subfolders, providing brief descriptions and maintaining an up-to-date overview for easy navigation and reference.[4]",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 49,
+        "title": "Develop FastMCP Server Foundation",
+        "description": "Implement the MCP server using FastMCP framework with basic tool registration",
+        "details": "Create MCPServer class using FastMCP framework. Setup server initialization with proper configuration. Implement basic server lifecycle: start(), stop(), health_check(). Create tool registration system for MCP tools. Setup async request handling and error management. Implement logging and monitoring. Create server configuration management with environment variables and config files.",
+        "testStrategy": "Test server startup/shutdown, tool registration, basic request handling, and configuration loading",
+        "priority": "high",
+        "dependencies": [
+          43
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design and Implement Server Class Structure",
+            "description": "Define the foundational server class, ensuring extensibility and maintainability. Establish core interfaces and base methods for server operations.",
+            "dependencies": [],
+            "details": "Focus on modular design, encapsulation, and adherence to best practices for custom implementation classes. Ensure the class can be easily extended for future features or integrations.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Server Lifecycle Management",
+            "description": "Develop mechanisms to manage the server's lifecycle, including initialization, startup, graceful shutdown, and resource cleanup.",
+            "dependencies": [
+              1
+            ],
+            "details": "Ensure the server can handle state transitions robustly and supports hooks for resource allocation and deallocation. Consider integration with deployment and configuration management best practices.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Develop Tool Registration Mechanism",
+            "description": "Create a system for registering, managing, and discovering tools or plugins that extend server functionality.",
+            "dependencies": [
+              1
+            ],
+            "details": "Design interfaces or registries that allow dynamic addition and removal of tools, supporting extensibility and modularity.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Implement Asynchronous Request Handling",
+            "description": "Enable the server to process incoming requests asynchronously, supporting concurrent operations and efficient resource utilization.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Utilize appropriate async programming paradigms and ensure thread safety. Integrate with the server class and lifecycle management for coordinated operation.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Set Up Logging and Monitoring",
+            "description": "Establish comprehensive logging and monitoring to track server health, performance, and errors.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "Integrate logging frameworks and monitoring tools. Ensure logs capture lifecycle events, tool registration, and async request processing for observability and troubleshooting.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 50,
+        "title": "Implement MCP Tools - organize_documentation",
+        "description": "Create the organize_documentation MCP tool for automated content organization",
+        "details": "Create organize_documentation tool with parameters: file_path, extraction_rules, dry_run. Integrate with ExtractionEngine and DocumentOrganizer. Implement tool schema validation using Pydantic models. Return structured results with extraction summary, created files, and reference updates. Support dry-run mode for preview. Handle errors gracefully with detailed error messages.",
+        "testStrategy": "Test tool execution with various parameters, validate schema compliance, verify dry-run functionality, and error handling",
+        "priority": "high",
+        "dependencies": [
+          47,
+          48,
+          49
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define Tool Parameters and Schema",
+            "description": "Specify and validate the parameters and schema required for the tool, ensuring all necessary inputs are well-defined and structured.",
+            "dependencies": [],
+            "details": "This includes outlining parameter types, required fields, default values, and validation rules to ensure robust input handling.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Integrate with Extraction and Organization Engines",
+            "description": "Connect the tool with relevant extraction and organization engines to enable data processing and transformation.",
+            "dependencies": [
+              1
+            ],
+            "details": "Establish interfaces and protocols for seamless data flow between the tool and external engines, ensuring compatibility and reliability.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Implement Result Formatting",
+            "description": "Develop logic to format the output results according to the required specifications and standards.",
+            "dependencies": [
+              2
+            ],
+            "details": "This involves structuring the processed data into the desired output format, such as JSON, CSV, or custom templates.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Develop Dry-Run Mode",
+            "description": "Implement a dry-run mode that allows users to simulate tool execution without making permanent changes or side effects.",
+            "dependencies": [
+              3
+            ],
+            "details": "Ensure the tool can process inputs and display expected outputs or actions without affecting actual data or systems.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Implement Robust Error Handling",
+            "description": "Design and integrate comprehensive error handling mechanisms to manage and report failures gracefully throughout the tool's workflow.",
+            "dependencies": [
+              4
+            ],
+            "details": "This includes input validation errors, integration failures, formatting issues, and dry-run exceptions, with clear logging and user feedback.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 51,
+        "title": "Implement MCP Tools - extract_content and create_reference",
+        "description": "Create extract_content and create_reference MCP tools for granular content management",
+        "details": "Create extract_content tool with parameters: source_file, section_selector, target_category, custom_filename. Create create_reference tool with parameters: source_file, target_file, reference_text, link_type. Implement selective content extraction based on headers, line ranges, or content patterns. Support custom reference link formats. Validate file paths and content existence. Return operation results with file paths and changes made.",
+        "testStrategy": "Test selective extraction accuracy, reference link creation, parameter validation, and operation result reporting",
+        "priority": "medium",
+        "dependencies": [
+          47,
+          49
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Extract Content Tool Logic",
+            "description": "Develop the logic for the extract_content tool to support granular extraction from various content types, ensuring compatibility with different formats and schemas.",
+            "dependencies": [],
+            "details": "Define extraction workflows, handle multi-modal content, and integrate with OCR and schema mapping components as needed.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Develop Create Reference Tool Logic",
+            "description": "Implement the logic for the create_reference tool to generate references from extracted content, supporting both custom and industry-defined schemas.",
+            "dependencies": [
+              1
+            ],
+            "details": "Ensure references are mapped accurately to the extracted data and stored in a structured format for downstream use.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Implement Parameter Validation",
+            "description": "Create robust parameter validation mechanisms to ensure all tool inputs are correct, complete, and secure before processing.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Validate required parameters, enforce type and value constraints, and handle errors gracefully to prevent invalid operations.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Enable Selective Extraction and Reference Handling",
+            "description": "Add logic to support selective extraction and reference creation based on user-specified parameters or content characteristics.",
+            "dependencies": [
+              3
+            ],
+            "details": "Allow users to specify which sections or data types to extract or reference, and ensure the tools process only the relevant content.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Develop Result Reporting Mechanism",
+            "description": "Implement a reporting system to present extraction and reference results, including success metrics, errors, and user feedback integration.",
+            "dependencies": [
+              4
+            ],
+            "details": "Display structured outputs, confidence scores, and processing metrics to users, and support feedback for continuous improvement.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 52,
+        "title": "Implement MCP Tools - validate_structure",
+        "description": "Create validate_structure MCP tool for documentation structure validation",
+        "details": "Create validate_structure tool with parameters: docs_path, check_links, check_categories. Implement validation checks: file structure compliance, broken reference links, category consistency, naming conventions. Create ValidationResult dataclass with detailed findings. Support different validation levels (basic, comprehensive). Generate validation reports with actionable recommendations.",
+        "testStrategy": "Test validation accuracy with various documentation structures, verify broken link detection, and validate report generation",
+        "priority": "medium",
+        "dependencies": [
+          48,
+          49
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Core Validation Logic",
+            "description": "Develop the main validation logic to enforce rules such as data type, format, range, length, uniqueness, and business constraints. Ensure rules are clear, consistent, and maintainable.",
+            "dependencies": [],
+            "details": "This includes coding the core functions or modules that will check input data against predefined validation criteria. The logic should be modular to allow for easy updates and extensions.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Develop Link and Category Checks",
+            "description": "Create specific validation routines to verify the correctness and integrity of links (e.g., URLs) and category assignments within the data.",
+            "dependencies": [
+              1
+            ],
+            "details": "This involves implementing checks for valid URL formats, ensuring links are reachable if required, and confirming that categories exist and are correctly assigned according to business rules.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Generate ValidationResult and Reporting",
+            "description": "Design and implement a system to collect, structure, and report the results of validation checks, including both successes and failures.",
+            "dependencies": [
+              2
+            ],
+            "details": "This includes defining a ValidationResult data structure, aggregating validation outcomes, and generating user-friendly reports or logs that summarize validation findings for review and auditing.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Implement Error Handling Mechanisms",
+            "description": "Develop robust error handling to manage validation failures, provide informative error messages, and prevent invalid data from being processed or stored.",
+            "dependencies": [
+              3
+            ],
+            "details": "This covers catching validation exceptions, returning actionable feedback to users or systems, and ensuring that invalid data is flagged or rejected according to requirements.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 53,
+        "title": "Build CLI Interface Foundation",
+        "description": "Create command-line interface using Click framework for manual operations",
+        "details": "Create CLI using Click framework with main command group 'trapper-keeper'. Implement subcommands: monitor, extract, organize, validate, config. Setup command-line argument parsing with proper validation. Implement interactive mode with prompts for guided operations. Add verbose/quiet output modes. Create help system with examples. Support configuration file loading from CLI.",
+        "testStrategy": "Test CLI command parsing, interactive mode functionality, help system, and configuration loading",
+        "priority": "medium",
+        "dependencies": [
+          43,
+          47
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set Up CLI Command Group Structure",
+            "description": "Design and implement the overall command group structure for the CLI, ensuring logical grouping and clear hierarchy of commands and subcommands.",
+            "dependencies": [],
+            "details": "Establish a consistent command structure (e.g., <group> <resource> <operation>) and organize commands in logical groups, following best practices for usability and discoverability.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Subcommands",
+            "description": "Develop the individual subcommands within each command group, ensuring each performs its intended action and follows naming conventions.",
+            "dependencies": [
+              1
+            ],
+            "details": "Define verbs for actions (e.g., 'init', 'push', 'status'), implement their logic, and ensure they are accessible through the CLI structure.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Parse Arguments and Options",
+            "description": "Integrate argument and option parsing for commands and subcommands, supporting both required and optional flags, and ensuring order-independence where possible.",
+            "dependencies": [
+              2
+            ],
+            "details": "Support flags and arguments for each subcommand, handle optional values (e.g., special words like 'none'), and ensure parsing is user-friendly and robust.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Add Help and Interactive Mode Support",
+            "description": "Implement comprehensive help screens and interactive mode features, ensuring users can access documentation and guidance directly from the CLI.",
+            "dependencies": [
+              3
+            ],
+            "details": "Provide a 'help' command and flag, display help when input is ambiguous or missing, and support interactive prompts for commands requiring user input.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 54,
+        "title": "Implement Configuration Management System",
+        "description": "Create comprehensive configuration system supporting YAML/JSON files and environment variables",
+        "details": "Create ConfigManager class supporting YAML and JSON configuration files. Implement configuration schema with validation using Pydantic. Support environment variable overrides with TRAPPER_KEEPER_ prefix. Create default configuration with sensible defaults. Implement per-project and global configuration support. Add configuration validation and error reporting. Support runtime configuration updates.",
+        "testStrategy": "Test configuration loading from various sources, environment variable overrides, validation, and error handling",
+        "priority": "medium",
+        "dependencies": [
+          43
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define Configuration Schema",
+            "description": "Establish a clear and structured schema for configuration, specifying required fields, data types, and validation rules.",
+            "dependencies": [],
+            "details": "Design the schema to support both YAML and JSON formats, ensuring it is concise and self-contained. Include descriptions for each field to guide usage and validation.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement YAML/JSON File Loading",
+            "description": "Develop functionality to load configuration data from YAML and JSON files according to the defined schema.",
+            "dependencies": [
+              1
+            ],
+            "details": "Ensure robust parsing and error handling for both file formats. Support loading from default and user-specified file paths.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Add Environment Variable Override",
+            "description": "Enable environment variables to override configuration values loaded from files.",
+            "dependencies": [
+              2
+            ],
+            "details": "Map environment variables to schema fields, ensuring that overrides are applied after file loading and before validation.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Implement Validation and Error Reporting",
+            "description": "Validate the final configuration against the schema and provide clear error messages for invalid or missing values.",
+            "dependencies": [
+              3
+            ],
+            "details": "Report errors with sufficient detail to aid debugging, including which field failed validation and why.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Support Runtime Configuration Updates",
+            "description": "Allow configuration to be updated at runtime, with re-validation and error handling for new values.",
+            "dependencies": [
+              4
+            ],
+            "details": "Implement mechanisms to detect and apply changes, ensuring consistency and minimal disruption to running processes.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 55,
+        "title": "Develop Comprehensive Test Suite",
+        "description": "Create comprehensive test suite with unit, integration, and end-to-end tests",
+        "details": "Create test suite using pytest with fixtures for test data. Implement unit tests for all core classes and methods. Create integration tests for MCP server tools and CLI commands. Develop end-to-end tests simulating complete workflows. Use pytest-asyncio for async test support. Implement test coverage reporting with pytest-cov. Create performance benchmarks for large file processing. Setup test data fixtures and mocking.",
+        "testStrategy": "Achieve >90% test coverage, validate all user workflows, verify performance benchmarks, and ensure test reliability",
+        "priority": "high",
+        "dependencies": [
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Develop Unit Test Suite",
+            "description": "Create and implement unit tests for individual functions and components to ensure correctness at the smallest testable parts.",
+            "dependencies": [],
+            "details": "Identify core modules and write isolated tests using mocking/stubbing as needed. Ensure tests are automated and cover edge cases.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Integration Tests",
+            "description": "Design and execute integration tests to verify interactions between multiple modules or components.",
+            "dependencies": [
+              1
+            ],
+            "details": "Plan integration scenarios, set up test data, and automate tests to validate interfaces and data flow between units. Use best practices such as testing in small batches and documenting test cases.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Set Up End-to-End (E2E) Testing",
+            "description": "Establish end-to-end tests to validate the complete workflow and user experience across the system.",
+            "dependencies": [
+              2
+            ],
+            "details": "Select appropriate E2E testing tools, define user journeys, and automate tests to simulate real-world usage. Optimize for performance to avoid long execution times.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Enable Async Test Support",
+            "description": "Ensure the test framework and test cases support asynchronous operations and concurrency.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Update or configure test runners to handle async code, and refactor tests to properly await asynchronous operations and handle timing issues.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Integrate Coverage Reporting",
+            "description": "Implement tools and processes to measure and report code coverage across all test types.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "Configure coverage tools to collect metrics from unit, integration, and E2E tests. Set up reporting dashboards and enforce minimum coverage thresholds.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Establish Performance Benchmarking",
+            "description": "Set up performance benchmarks to monitor and validate the speed and resource usage of critical code paths.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "details": "Identify performance-critical areas, create benchmark tests, and automate performance measurement as part of the CI pipeline.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "Test Data Management and Mocking Setup",
+            "description": "Develop infrastructure for managing test data and creating mocks/fakes for external dependencies.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "details": "Implement strategies for generating, seeding, and cleaning up test data. Set up reusable mocks and stubs for APIs, databases, and third-party services.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 56,
+        "title": "Performance Optimization and Error Handling",
+        "description": "Optimize performance for large files and implement robust error handling throughout the system",
+        "details": "Optimize markdown parsing for files up to 10,000 lines using streaming and chunked processing. Implement memory-efficient file operations with generators. Add comprehensive error handling with custom exception classes. Implement retry logic for file operations. Add performance monitoring and logging. Optimize async operations and reduce I/O blocking. Create graceful degradation for edge cases.",
+        "testStrategy": "Performance tests with large files, memory usage profiling, error scenario testing, and stress testing under various conditions",
+        "priority": "medium",
+        "dependencies": [
+          55
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Profile and Optimize Markdown Parsing",
+            "description": "Analyze current markdown parsing performance, identify bottlenecks (e.g., excessive function calls), and implement targeted optimizations such as lazy loading, chunking, or more efficient parsing algorithms.",
+            "dependencies": [],
+            "details": "Use profiling tools to measure parsing hotspots. Consider techniques like lazy loading, virtualization, and memoization to reduce memory and CPU usage during markdown parsing. Refactor or replace inefficient parsing methods as needed.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Memory-Efficient File Operations",
+            "description": "Redesign file reading and writing logic to minimize memory footprint, especially for large documents, by using streaming, chunked processing, or lazy loading.",
+            "dependencies": [],
+            "details": "Adopt streaming APIs or chunked reads/writes to avoid loading entire files into memory. Ensure compatibility with markdown parsing and async processing requirements.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Refactor for Asynchronous Processing",
+            "description": "Convert synchronous operations (parsing, file I/O, etc.) to asynchronous equivalents to improve throughput and responsiveness, especially under high load.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Use async/await patterns or event-driven frameworks. Ensure that async logic integrates smoothly with markdown parsing and file operations, and does not introduce race conditions.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Design and Integrate Error Handling Framework",
+            "description": "Develop a robust error handling system that captures, logs, and categorizes errors across all modules, supporting graceful degradation and recovery.",
+            "dependencies": [
+              3
+            ],
+            "details": "Implement centralized error logging, structured error types, and context-aware error propagation. Ensure that errors in async or file operations are properly caught and reported.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Implement Intelligent Retry Logic",
+            "description": "Add configurable retry mechanisms for transient failures (e.g., file access, async tasks), with exponential backoff and idempotency safeguards.",
+            "dependencies": [
+              4
+            ],
+            "details": "Design retry strategies that avoid duplicate processing and support custom retry policies. Integrate with the error handling framework for unified reporting and control.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Integrate Performance Monitoring and Reporting",
+            "description": "Set up real-time performance monitoring to track key metrics (parsing speed, memory usage, error rates, retries) and provide actionable insights.",
+            "dependencies": [
+              5
+            ],
+            "details": "Use logging, tracing, and dashboard tools to visualize performance. Ensure monitoring covers all optimized areas and supports alerting for anomalies.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 57,
+        "title": "Documentation and Package Distribution",
+        "description": "Create comprehensive documentation and prepare package for distribution",
+        "details": "Create comprehensive documentation using Sphinx or MkDocs. Write API documentation with docstrings. Create user guide with examples and tutorials. Setup package distribution with setuptools and pyproject.toml. Create GitHub Actions for CI/CD pipeline. Implement automated testing and release workflows. Create Docker container for easy deployment. Setup PyPI package publishing.",
+        "testStrategy": "Validate documentation completeness, test package installation from PyPI, verify CI/CD pipeline, and validate Docker container functionality",
+        "priority": "medium",
+        "dependencies": [
+          55,
+          56
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set Up Python Package Structure and Configuration",
+            "description": "Initialize the project directory, create the necessary Python package structure, and configure packaging files using setuptools and pyproject.toml.",
+            "dependencies": [],
+            "details": "Create the main package directory, add __init__.py files, and set up setup.py or pyproject.toml with metadata and dependencies required for the project.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Write API Reference and User Guide Documentation",
+            "description": "Document the codebase with comprehensive docstrings and write user guides, usage examples, and API references.",
+            "dependencies": [
+              1
+            ],
+            "details": "Add docstrings to all public modules, classes, and functions. Draft user-facing documentation such as installation instructions, usage guides, and API reference content in Markdown (for MkDocs) or reStructuredText (for Sphinx).",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Generate and Build Documentation (Sphinx/MkDocs)",
+            "description": "Configure and build the documentation using Sphinx or MkDocs, ensuring auto-generation of API docs from code docstrings.",
+            "dependencies": [
+              2
+            ],
+            "details": "Set up Sphinx or MkDocs configuration files, enable extensions for API doc generation (e.g., autodoc for Sphinx, mkdocstrings for MkDocs), and build the documentation locally to verify output.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Set Up CI/CD Pipeline",
+            "description": "Configure a CI/CD workflow to automate testing, documentation builds, and deployment steps.",
+            "dependencies": [
+              1,
+              3
+            ],
+            "details": "Create configuration files for CI/CD (e.g., GitHub Actions, GitLab CI) to run tests, build documentation, and prepare for publishing. Ensure the pipeline fails on errors and produces build artifacts.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Configure Docker and PyPI Publishing",
+            "description": "Set up Docker for containerization and configure workflows for publishing the package to PyPI.",
+            "dependencies": [
+              4
+            ],
+            "details": "Write a Dockerfile for the project, test Docker builds, and add scripts or CI steps for publishing the package to PyPI. Ensure versioning and credentials are handled securely.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
       }
     ],
     "metadata": {
       "created": "2025-07-04T03:05:44.781Z",
-      "updated": "2025-07-04T03:05:44.782Z",
+      "updated": "2025-07-07T01:54:40.249Z",
       "description": "Tasks for master context"
     }
   }

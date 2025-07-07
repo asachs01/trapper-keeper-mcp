@@ -2,77 +2,72 @@
 
 > **Keep your AI context organized like a boss** 📚✨
 
-An MCP server that automatically manages and organizes your project documentation using the proven "document reference pattern" - keeping your CLAUDE.md files clean, scannable, and under 500 lines while maintaining full context for AI assistants.
+An intelligent document extraction and organization system built as a Model Context Protocol (MCP) server using Python and FastMCP. Trapper Keeper watches directories for markdown and text files, extracts categorized content, and organizes it into structured outputs.
 
-## The Problem We Solve
+## 🏗️ Architecture
 
-**Before Trapper Keeper:**
-- CLAUDE.md files growing to 1000+ lines 😱
-- Lost context and documentation sprawl
-- AI tools struggling with massive files
-- Nightmare version control and collaboration
-- "Where did I put that architecture doc?" syndrome
+Trapper Keeper MCP is designed with a modular, event-driven architecture that supports both CLI and MCP server modes:
 
-**After Trapper Keeper:**
-- Clean, scannable CLAUDE.md files under 500 lines ✅
-- Intelligent document organization with visual references
-- AI assistants get perfect context every time
-- Team collaboration actually works
-- Documentation that scales infinitely
+### Key Components
 
-## What It Does
+- **Core**: Base classes, type definitions, and configuration management
+- **Monitoring**: File system monitoring with debouncing and pattern matching
+- **Parser**: Extensible document parsing (currently supports Markdown)
+- **Extractor**: Intelligent content extraction with category detection
+- **Organizer**: Flexible output organization and formatting
+- **MCP Server**: FastMCP-based server implementation
+- **CLI**: Rich command-line interface
 
-Trapper Keeper automatically:
+## ✅ Features
 
-### 📊 **Smart File Management**
-- Monitors CLAUDE.md file size and suggests extractions at 200+ lines
-- Auto-creates organized `/docs/` structure with consistent naming
-- Maintains reference links with visual emoji categorization
-- Prevents documentation sprawl before it starts
+### Intelligent Content Extraction
 
-### 🎯 **Context Optimization** 
-- Ensures AI assistants get focused, relevant documentation
-- Maintains full project context without token overload
-- Smart content extraction based on document types
-- Reference resolution for seamless AI workflow
+- **Category Detection**: Automatically categorizes content using pattern matching and keywords
+- **Importance Scoring**: Assigns importance scores based on content relevance
+- **Section Parsing**: Preserves document structure with hierarchical sections
+- **Code Block Extraction**: Extracts and categorizes code snippets
+- **Link Extraction**: Groups and organizes document links
 
-### 🔄 **Automated Organization**
-- Auto-categorizes documents with emoji system (🏗️ Architecture, 🔐 Security, etc.)
-- Updates reference sections when new docs are created
-- Tracks critical documentation patterns
-- Maintains consistency across projects
+### Real-time File Monitoring
 
-### 🚨 **Critical Pattern Enforcement**
-- Enforces "READ THIS FIRST!" patterns for foundational docs
-- Tracks problem/solution documentation
-- Prevents knowledge loss with mandatory reference updates
-- Version control friendly organization
+- **Directory Watching**: Monitors directories for file changes
+- **Pattern Matching**: Configurable file patterns and ignore rules
+- **Debouncing**: Prevents duplicate processing of rapid changes
+- **Event System**: Async event-driven architecture for scalability
 
-## Quick Start
+### Flexible Organization
+
+- **Multiple Output Formats**: Markdown, JSON, and YAML
+- **Grouping Options**: By category, document, or custom grouping
+- **Index Generation**: Automatic index creation with statistics
+- **Metadata Preservation**: Maintains source information and timestamps
+
+## 📋 Setup
+
+### Prerequisites
+
+- Python 3.8 or higher
+- pip or poetry for dependency management
 
 ### Installation
 
+1. Clone the repository:
 ```bash
-npm install -g trapper-keeper-mcp
-# or
-pip install trapper-keeper-mcp
+git clone https://github.com/yourusername/trapper-keeper-mcp.git
+cd trapper-keeper-mcp
 ```
 
-### Basic Usage
-
+2. Install dependencies:
 ```bash
-# Initialize in your project
-trapper-keeper init
-
-# Auto-organize existing CLAUDE.md
-trapper-keeper organize
-
-# Monitor and maintain (runs in background)
-trapper-keeper watch
-
-# Extract specific content type
-trapper-keeper extract --type architecture
+pip install -e .
 ```
+
+3. Copy the example configuration:
+```bash
+cp config.example.yaml config.yaml
+```
+
+4. Edit `config.yaml` to match your needs
 
 ### MCP Integration
 
@@ -82,178 +77,209 @@ Add to your MCP settings:
 {
   "mcpServers": {
     "trapper-keeper": {
-      "command": "trapper-keeper",
-      "args": ["--mcp"],
+      "command": "python",
+      "args": ["-m", "trapper_keeper.mcp.server"],
       "env": {
-        "PROJECT_ROOT": "/path/to/your/project"
+        "PYTHONPATH": "/path/to/trapper-keeper-mcp/src"
       }
     }
   }
 }
 ```
 
-## Core Features
+## 🌐 API
 
-### 🎨 **Visual Documentation Categories**
+### CLI Commands
 
-Automatic categorization with consistent emoji system:
+```bash
+# Process a single file
+trapper-keeper process document.md -o ./output
 
-| Category | Emoji | Purpose |
-|----------|-------|---------|
-| Architecture | 🏗️ | System design, technical architecture |
-| Database | 🗄️ | Schemas, migrations, data models |
-| Security | 🔐 | Auth, permissions, security protocols |
-| Features | ✅ | Specifications, requirements |
-| Monitoring | 📊 | Health checks, analytics, logging |
-| Critical | 🚨 | Troubleshooting, emergency procedures |
-| Setup | 📋 | Installation, deployment guides |
-| API | 🌐 | Endpoints, integrations, documentation |
+# Process a directory
+trapper-keeper process ./docs -c "🏗️ Architecture" -c "🔐 Security" -f json
 
-### 🧠 **Intelligent Content Detection**
+# Watch a directory
+trapper-keeper watch ./docs -p "*.md" -p "*.txt" --recursive
 
-Trapper Keeper recognizes and properly categorizes:
-- Architecture diagrams and system designs
-- Database schemas and migration files
-- Authentication flows and security docs
-- Setup and deployment instructions
-- Troubleshooting guides and solutions
-- API documentation and specifications
+# List categories
+trapper-keeper categories
 
-### 🔗 **Smart Reference Management**
+# Run as MCP server
+trapper-keeper server
 
-- **Auto-linking**: Creates and maintains reference links
-- **Context preservation**: Ensures AI tools never lose important context
-- **Visual scanning**: Emoji-based system for quick document identification
-- **Critical flagging**: Automatic "READ THIS FIRST!" for foundational docs
+# Show/save configuration
+trapper-keeper config
+trapper-keeper config -o my-config.yaml
+```
 
-### 📈 **Project Health Monitoring**
+### Category Configuration
 
-- Documentation coverage analysis
-- File size monitoring and alerts
-- Reference link validation
-- Team collaboration insights
-- Documentation freshness tracking
+The system uses emoji-prefixed categories for easy identification:
+
+- 🏗️ Architecture - System design and structure
+- 🗄️ Database - Database schemas and queries
+- 🔐 Security - Authentication and security concerns
+- ✅ Features - Feature descriptions and requirements
+- 📊 Monitoring - Logging and observability
+- 🚨 Critical - Urgent issues and blockers
+- 📋 Setup - Installation and configuration
+- 🌐 API - API endpoints and integrations
+- 🧪 Testing - Test cases and strategies
+- ⚡ Performance - Optimization and speed
+- 📚 Documentation - Guides and references
+- 🚀 Deployment - Deployment and CI/CD
+- ⚙️ Configuration - Settings and options
+- 📦 Dependencies - Package management
 
 ## MCP Tools Available
 
-When running as an MCP server, Trapper Keeper provides these tools to AI assistants:
+The MCP server exposes the following tools:
 
-### `organize_documentation`
-Automatically reorganizes project documentation using the reference pattern.
+### `process_file`
+Process a single file and extract categorized content.
 
-### `extract_content`
-Intelligently extracts content from CLAUDE.md based on type and size thresholds.
-
-### `create_reference`
-Creates proper reference links with emoji categorization.
-
-### `validate_structure`
-Ensures documentation structure follows best practices.
-
-### `suggest_improvements`
-Analyzes current documentation and suggests organizational improvements.
-
-### `track_critical_docs`
-Maintains the critical documentation pattern and prevents context loss.
-
-## Configuration
-
-### Project Settings
-
-```yaml
-# trapper-keeper.yml
-thresholds:
-  claude_md_max_lines: 500
-  extract_at_lines: 200
-  
-organization:
-  docs_folder: "/docs"
-  use_emojis: true
-  auto_reference: true
-  
-patterns:
-  enforce_critical_section: true
-  require_read_first_flags: true
-  auto_troubleshooting_docs: true
-
-monitoring:
-  watch_mode: true
-  validate_links: true
-  health_checks: true
+```python
+{
+    "file_path": "/path/to/document.md",
+    "extract_categories": ["🏗️ Architecture", "🔐 Security"],
+    "output_format": "markdown"
+}
 ```
 
-### Team Integration
+### `process_directory`
+Process all matching files in a directory.
 
-Works seamlessly with:
-- **Cursor**: Auto-applies organization rules
-- **Claude Code**: Integrates with global settings
-- **VS Code**: Extension available for real-time monitoring
-- **Git hooks**: Pre-commit documentation validation
-- **CI/CD**: Automated documentation health checks
-
-## Real-World Impact
-
-### Before/After Example
-
-**Before** (nightmare 800-line CLAUDE.md):
-```
-# My Project - Claude Instructions
-[800 lines of mixed architecture, database schemas, setup instructions, troubleshooting, API docs, security notes, deployment guides, and random notes all jumbled together]
+```python
+{
+    "directory_path": "/path/to/docs",
+    "patterns": ["*.md", "*.txt"],
+    "recursive": true,
+    "output_dir": "./output",
+    "output_format": "json"
+}
 ```
 
-**After** (clean 150-line CLAUDE.md with references):
-```markdown
-# My Project - Claude Instructions
+### `watch_directory`
+Start watching a directory for changes.
 
-## 📚 Key Documentation References
-- **🏗️ System Architecture**: `/docs/ARCHITECTURE.md` 🚨 READ THIS FIRST!
-- **🗄️ Database Schema**: `/docs/DATABASE_SCHEMA.md`
-- **🔐 Authentication Flow**: `/docs/AUTH_SYSTEM.md`
-- **📋 Setup Guide**: `/docs/SETUP.md`
-- **🚨 Troubleshooting**: `/docs/TROUBLESHOOTING.md`
-
-## 📋 CRITICAL DOCUMENTATION PATTERN
-[Auto-maintained section with references to all critical docs]
-
-## Core Context
-[Clean, focused project overview - 100 lines max]
+```python
+{
+    "directory_path": "/path/to/docs",
+    "patterns": ["*.md"],
+    "recursive": true,
+    "process_existing": true
+}
 ```
 
-### Success Metrics
+### `stop_watching`
+Stop watching a specific directory.
 
-Teams using Trapper Keeper report:
-- **85% reduction** in CLAUDE.md file size
-- **3x faster** onboarding for new team members  
-- **90% fewer** "where is that doc?" questions
-- **Zero context loss** when working with AI assistants
-- **Improved code review** efficiency with cleaner documentation
+### `list_watched_directories`
+Get information about all watched directories.
+
+### `get_categories`
+Get list of available extraction categories.
+
+### `update_config`
+Update server configuration at runtime.
+
+## 📊 Monitoring
+
+Trapper Keeper includes Prometheus metrics for monitoring:
+
+- Files processed (success/failure counts)
+- Event publications by type
+- Content extraction by category
+- Processing duration histograms
+- Queue sizes and active watchers
+
+Metrics are exposed on port 9090 by default.
+
+## 🚨 Critical Configuration
+
+### Environment Variables
+
+- `TRAPPER_KEEPER_LOG_LEVEL`: Logging level (DEBUG, INFO, WARNING, ERROR)
+- `TRAPPER_KEEPER_METRICS_PORT`: Prometheus metrics port
+- `TRAPPER_KEEPER_MCP_PORT`: MCP server port
+- `TRAPPER_KEEPER_OUTPUT_DIR`: Default output directory
+- `TRAPPER_KEEPER_MAX_CONCURRENT`: Maximum concurrent file processing
+
+## 🔐 Security
+
+- File access is restricted to configured paths
+- No remote code execution
+- Configurable ignore patterns for sensitive files
+- All file operations are read-only by default
+
+## Development
+
+### Project Structure
+
+```
+src/trapper_keeper/
+├── core/           # Base classes and types
+├── monitoring/     # File monitoring
+├── parser/         # Document parsers
+├── extractor/      # Content extraction
+├── organizer/      # Output organization
+├── mcp/           # MCP server
+├── cli/           # CLI interface
+└── utils/         # Utilities
+```
+
+### Adding a New Parser
+
+1. Create a new parser class inheriting from `Parser`
+2. Implement required methods: `parse()`, `can_parse()`
+3. Register in `parser_factory.py`
+
+### Adding a New Category
+
+1. Add to `ExtractionCategory` enum in `types.py`
+2. Add detection patterns in `category_detector.py`
+
+### Plugin System
+
+The architecture supports plugins through the `Plugin` protocol. Plugins can:
+- Process documents
+- Add new extraction categories
+- Implement custom output formats
 
 ## Why "Trapper Keeper"?
 
 Named after the iconic 90s school organizer, Trapper Keeper MCP does for your code documentation what those colorful binders did for school papers - keeps everything organized, accessible, and prevents the chaos of loose papers (or in our case, sprawling documentation) from taking over your project.
 
-Just like the original Trapper Keeper, this tool:
-- **Organizes everything** in a logical, visual system
-- **Prevents loss** of important information
-- **Makes finding things easy** with clear categorization
-- **Scales with your needs** as projects grow
-- **Looks good** while doing it (emoji categorization!)
+## Documentation
 
-## Contributing
+### Getting Started
+- [Quick Start Guide](docs/getting-started.md) - Get up and running in 5 minutes
+- [Installation Guide](docs/installation.md) - Detailed installation instructions
+- [Configuration Reference](docs/configuration.md) - All configuration options
 
-We welcome contributions! Whether it's:
-- New organization patterns
-- Additional file type detection
-- Integration with more editors
-- Documentation improvements
-- Bug fixes and optimizations
+### User Guides
+- [CLI Guide](docs/cli-guide.md) - Complete CLI command reference
+- [MCP Tools Reference](docs/mcp-tools.md) - Using MCP tools effectively
+- [API Reference](docs/api-reference.md) - Python API documentation
+- [Troubleshooting Guide](docs/troubleshooting.md) - Common issues and solutions
 
-See our [Contributing Guide](CONTRIBUTING.md) for details.
+### Tutorials
+- [Basic Usage](docs/tutorials/basic-usage.md) - Step-by-step tutorials
+- [Advanced Workflows](docs/tutorials/advanced-workflows.md) - Complex use cases
+- [Integration Guide](docs/tutorials/integration-guide.md) - Integrate with other tools
+- [Custom Categories](docs/tutorials/custom-categories.md) - Create custom categories
+
+### Architecture & Development
+- [Architecture Overview](docs/architecture/overview.md) - System design
+- [Contributing Guide](docs/development/contributing.md) - How to contribute
+- [Plugin Development](docs/development/plugin-development.md) - Extend functionality
+
+### Examples
+- [Example Configurations](examples/configurations/) - Configuration examples
+- [Python Scripts](examples/scripts/) - API usage examples
+- [Docker Setup](examples/docker/) - Docker deployment examples
+- [CLAUDE.md Examples](examples/claude-files/) - Sample documentation files
 
 ## License
 
-MIT License - Keep your docs organized, keep your code clean! 📚✨
-
----
-
-**Transform your documentation chaos into organized bliss.** Try Trapper Keeper MCP today and never lose context again! 🚀
+MIT License - see LICENSE file for details.
